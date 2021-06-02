@@ -1,3 +1,4 @@
+package Interfaces;
 
 public interface INode<T extends Comparable<T>, V> {
     static final boolean RED   = true;
@@ -9,7 +10,7 @@ public interface INode<T extends Comparable<T>, V> {
     void setParent(INode<T, V> parent);
     /**
      * Returns the parent of the current node in the tree
-     * @return INode wrapper to the parent of the current node
+     * @return Interfaces.INode wrapper to the parent of the current node
      */
     INode<T, V> getParent();
     /**
@@ -19,7 +20,7 @@ public interface INode<T extends Comparable<T>, V> {
     void setLeftChild(INode<T, V> leftChild);
     /**
      * Returns the left child of the current node in the tree
-     * @return INode wrapper to the left child of the current node
+     * @return Interfaces.INode wrapper to the left child of the current node
      */
     INode<T, V> getLeftChild();
 
@@ -31,7 +32,7 @@ public interface INode<T extends Comparable<T>, V> {
 
     /**
      * Returns the right child of the current node in the tree
-     * @return INode wrapper to the right child of the current node
+     * @return Interfaces.INode wrapper to the right child of the current node
      */
     INode<T, V> getRightChild();
     /**
