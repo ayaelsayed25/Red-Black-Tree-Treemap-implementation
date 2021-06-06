@@ -2,11 +2,20 @@ import Interfaces.INode;
 
 public class Node<T extends Comparable<T>, V> implements INode {
 
-        private T key;
-        private V value;
-        private INode<T,V> leftChild, rightChild,parent;
-        private boolean color;
+    private T key;
+    private V value;
+    private INode<T,V> leftChild, rightChild,parent;
+    private boolean color;
 
+    public Node(){}
+    /*
+    public  Node(V value,INode leftChild,INode rightChild,INode parent){
+        this.value=value;
+        this.leftChild=leftChild;
+        this.rightChild=rightChild;
+        this.parent=parent;
+
+    }*/
     @Override
     public void setParent(INode parent) {
         this.parent = parent;
@@ -70,5 +79,17 @@ public class Node<T extends Comparable<T>, V> implements INode {
     @Override
     public boolean isNull() {
         return this.key == null;
+    }
+    public boolean isLeftChild(INode node){
+        if(node==this.leftChild)
+            return true;
+        else
+            return false;
+    }
+    public boolean isRightChild(INode node){
+        if(node==this.rightChild)
+            return true;
+        else
+            return false;
     }
 }
