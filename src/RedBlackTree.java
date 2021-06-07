@@ -5,7 +5,7 @@ import java.security.Key;
 
 public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T,V> {
 
-    INode<T,V> root = new Node<>();
+    INode<T,V> root = null;
 
     @Override
     public INode<T,V> getRoot() {
@@ -34,13 +34,13 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 
     @Override
     public void insert(Comparable key, Object value) {
+        INode newNode = new Node(key,value,true);
         if(root == null) {
-            root.setKey((T) key);
+            root=newNode;
             root.setColor(false);
-            root.setValue((V) value);
             return;
         }
-        INode newNode = new Node(key,value,true); //New Node Creation
+
         insertNode(this.root,newNode);                  //BST Insertion
         insertCases(newNode);                           //Insertion Cases
     }
@@ -49,26 +49,34 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
      * @param newNode
      */
     private void insertNode(INode<T,V> root,INode<T,V> newNode) {
-        //Base Condition
-        if(root == null) {
-            newNode.setParent(root.getParent());
-            root = newNode;
+
+        if(newNode.getKey().compareTo(root.getKey()) > 0 ) {    //newNode > root
+            if (root.getRightChild() == null) {
+                root.setRightChild(newNode);
+                newNode.setParent(root);
+                return;
+            }
+            insertNode(root.getRightChild(), newNode);
         }
-        if(newNode.getKey().compareTo(root.getKey()) > 0 )    //newNode > root
-            insertNode(root.getRightChild(),newNode);
-        else if (newNode.getKey().compareTo(root.getKey()) < 0) //newNode < root
-            insertNode(root.getLeftChild(),newNode);
+        else if (newNode.getKey().compareTo(root.getKey()) < 0) { //newNode < root
+            if (root.getLeftChild() == null) {
+                root.setLeftChild(newNode);
+                newNode.setParent(root);
+                return;
+            }
+            insertNode(root.getLeftChild(), newNode);
+        }
     }
 
     private void insertCases(INode<T,V> newNode){
-        //Easy Case , Parent is Black
-        if(!newNode.getParent().getColor())
+        Node<T,V> parent = (Node<T,V>) newNode.getParent();
+        Node<T,V> grandParent = (Node<T,V>) newNode.getParent().getParent();
+        //Easy Case ,Parent is Black OR it does not have grandparent
+        if(!newNode.getParent().getColor()||grandParent==null)
             return;
         boolean uncleColor = getUncleColor(newNode);
         boolean parentDirection = false ,childDirection = false ;   // Right  --> True , Left --> false
-        //Check whether it has grandparent or not
-        Node<T,V> parent = (Node<T,V>) newNode.getParent();
-        Node<T,V> grandParent = (Node<T,V>) newNode.getParent().getParent();
+
         if (grandParent.isRightChild(parent))
             parentDirection = true;
         if(parent.isRightChild(newNode))
