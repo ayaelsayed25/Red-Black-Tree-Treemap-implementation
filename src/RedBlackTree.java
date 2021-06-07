@@ -47,13 +47,13 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
             return false;
         //TODO if parent is null (root case) //1
         if(deletedNode.getLeftChild() == null && deletedNode.getRightChild() == null){
-            if(deletedNode.getColor()){
-                if(((Node<T,V>)deletedNode).isChildLeft())
-                    deletedNode.getParent().setLeftChild(null);
-                else
-                    deletedNode.getParent().setRightChild(null);
+            if(!deletedNode.getColor()){
+                doubleBlack(deletedNode);
             }
-            else deletedNode = doubleBlack(deletedNode);
+            if(((Node<T,V>)deletedNode).isChildLeft())
+                deletedNode.getParent().setLeftChild(null);
+            else
+                deletedNode.getParent().setRightChild(null);
         }
         else if(deletedNode.getLeftChild() == null){
             if(!deletedNode.getColor())
@@ -136,15 +136,60 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         //TODO implement find min //1
         return null;
     }
-    private INode<T,V> doubleBlack(INode<T,V> node) {
-        //TODO implement find black
-        return null;
+    private void doubleBlack(INode<T,V> node) {
+        //CASE 0: IF DB IS ROOT
+        if(node.getParent() == null)
+            return;
+        INode<T, V> sibling = ((Node)node).getSibling();
+        //CASE 1: IF SIBLING IS RED
+        if(sibling.getColor())
+        {
+            node.getParent().setColor(true);
+            sibling.setColor(false);
+            if(((Node<T, V>) node).isChildLeft()) rotateLeft(node.getParent());
+            else rotateRight(node.getParent());
+            doubleBlack(node);
+        }
+        //CASE 2: IF SIBLING IS BLACK AND BOTH CHILDREN ARE BLACK
+        else if(checkCase2(sibling))
+        {
+            INode<T, V> parent = node.getParent();
+            if(parent.getColor())
+            {
+                parent.setColor(false);
+                sibling.setColor(true);
+                return;
+            }
+            else
+            {
+                sibling.setColor(true);
+                doubleBlack(parent);
+            }
+        }
+        return;
         // if red sibling {rotate} //2
         //if black sibling + no red children  {recolor and recurse} //2
         // if black sibling + at least one red child{near & far > rotations} //1
         // sarah 1
         // aya 2
     }
-
+    private boolean checkCase2(INode<T, V> sibling)
+    {
+        if(sibling.getLeftChild() == null && sibling.getRightChild() == null)
+            return true;
+        else if(sibling.getRightChild() == null)
+        {
+            if(!sibling.getLeftChild().getColor())
+                return true;
+        }
+        else if(sibling.getLeftChild() == null)
+        {
+            if(!sibling.getRightChild().getColor())
+                return true;
+        }
+        else if(!sibling.getRightChild().getColor() && !sibling.getLeftChild().getColor())
+            return true;
+        return false;
+    }
 
 }

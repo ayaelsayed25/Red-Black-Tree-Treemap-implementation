@@ -14,7 +14,6 @@ public class Node<T extends Comparable<T>, V> implements INode<T,V> {
         this.leftChild=leftChild;
         this.rightChild=rightChild;
         this.parent=parent;
-
     }*/
     @Override
     public void setParent(INode<T,V> parent) {
@@ -99,5 +98,12 @@ public class Node<T extends Comparable<T>, V> implements INode<T,V> {
         if(this.parent == null)
             return false;
         return this.equals(this.parent.getLeftChild());
+    }
+    public INode<T, V> getSibling()
+    {
+        if(isChildLeft())
+            return parent.getRightChild();
+        else
+            return parent.getLeftChild();
     }
 }
