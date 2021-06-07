@@ -35,9 +35,9 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
     @Override
     public void insert(Comparable key, Object value) {
         if(root == null) {
-            root.setKey(key);
+            root.setKey((T) key);
             root.setColor(false);
-            root.setValue(value);
+            root.setValue((V) value);
             return;
         }
         INode newNode = new Node(key,value,true); //New Node Creation
