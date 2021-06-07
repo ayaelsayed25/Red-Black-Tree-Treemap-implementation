@@ -1,6 +1,6 @@
 import Interfaces.INode;
 
-public class Node<T extends Comparable<T>, V> implements INode {
+public class Node<T extends Comparable<T>, V> implements INode<T,V> {
 
     private T key;
     private V value;
@@ -17,53 +17,55 @@ public class Node<T extends Comparable<T>, V> implements INode {
 
     }*/
     @Override
-    public void setParent(INode parent) {
+    public void setParent(INode<T,V> parent) {
         this.parent = parent;
     }
 
     @Override
-    public INode getParent() {
+    public INode<T,V> getParent() {
         return this.parent;
     }
 
     @Override
-    public void setLeftChild(INode leftChild) {
+    public void setLeftChild(INode<T,V> leftChild) {
         this.leftChild = leftChild;
     }
 
     @Override
-    public INode getLeftChild() {
+    public INode<T,V> getLeftChild() {
         return this.leftChild;
     }
 
     @Override
-    public void setRightChild(INode rightChild) {
+    public void setRightChild(INode<T,V> rightChild) {
         this.rightChild = rightChild;
     }
 
     @Override
-    public INode getRightChild() {
+    public INode<T,V> getRightChild() {
         return this.rightChild;
     }
 
     @Override
-    public Comparable getKey() {
-        return this.key;
+    public T getKey() {
+        return null;
     }
 
     @Override
-    public void setKey(Comparable key) {
-        this.key = (T) key;
+    public V getValue() {
+        return null;
     }
 
-    @Override
-    public Object getValue() {
-        return this.value;
-    }
 
     @Override
-    public void setValue(Object value) {
-        this.value = (V) value;
+    public void setKey(T key) {
+        this.key = key;
+    }
+
+
+    @Override
+    public void setValue(V value) {
+        this.value = value;
     }
 
     @Override
@@ -80,16 +82,22 @@ public class Node<T extends Comparable<T>, V> implements INode {
     public boolean isNull() {
         return this.key == null;
     }
-    public boolean isLeftChild(INode node){
+    public boolean isLeftChild(INode<T,V> node){
+        //TODO is == right ?
         if(node==this.leftChild)
             return true;
         else
             return false;
     }
-    public boolean isRightChild(INode node){
+    public boolean isRightChild(INode<T,V> node){
         if(node==this.rightChild)
             return true;
         else
             return false;
+    }
+    public boolean isChildLeft(){
+        if(this.parent == null)
+            return false;
+        return this.equals(this.parent.getLeftChild());
     }
 }
