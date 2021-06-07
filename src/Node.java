@@ -5,17 +5,17 @@ public class Node<T extends Comparable<T>, V> implements INode {
     private T key;
     private V value;
     private INode<T,V> leftChild, rightChild,parent;
-    private boolean color;
+    private boolean color;      //Red is True, Black is False
 
     public Node(){}
-    /*
-    public  Node(V value,INode leftChild,INode rightChild,INode parent){
-        this.value=value;
-        this.leftChild=leftChild;
-        this.rightChild=rightChild;
-        this.parent=parent;
-
-    }*/
+    public Node(T key, V value, boolean color){
+        this.key = key;
+        this.value = value;
+        this.color = color;
+        this.leftChild = null;
+        this.rightChild = null;
+        this.parent = null;
+    }
     @Override
     public void setParent(INode parent) {
         this.parent = parent;
@@ -80,14 +80,28 @@ public class Node<T extends Comparable<T>, V> implements INode {
     public boolean isNull() {
         return this.key == null;
     }
+
+    public INode getUncle(){
+        INode uncle = null;
+        INode grandParent = this.getParent().getParent();
+
+        if (((Node)grandParent).isRightChild(this.getParent())){
+            uncle = grandParent.getLeftChild();
+        }
+        else{
+            uncle = grandParent.getRightChild();
+        }
+        return uncle;
+    }
+
     public boolean isLeftChild(INode node){
-        if(node==this.leftChild)
+        if(node == this.leftChild)
             return true;
         else
             return false;
     }
     public boolean isRightChild(INode node){
-        if(node==this.rightChild)
+        if(node == this.rightChild)
             return true;
         else
             return false;
