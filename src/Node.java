@@ -38,7 +38,7 @@ public class Node<T extends Comparable<T>, V> implements INode<T,V> {
 
     @Override
     public void setRightChild(INode<T,V> rightChild) {
-        this.rightChild = rightChild;
+        this.rightChild =rightChild;
     }
 
     @Override
@@ -48,12 +48,12 @@ public class Node<T extends Comparable<T>, V> implements INode<T,V> {
 
     @Override
     public T getKey() {
-        return null;
+        return this.key;
     }
 
     @Override
     public V getValue() {
-        return null;
+        return this.value;
     }
 
 
