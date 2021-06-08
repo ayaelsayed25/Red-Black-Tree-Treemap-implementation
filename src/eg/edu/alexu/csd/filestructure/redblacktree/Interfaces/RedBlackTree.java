@@ -1,22 +1,24 @@
 package eg.edu.alexu.csd.filestructure.redblacktree.Interfaces;
 
+import javax.management.RuntimeErrorException;
+
 public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T,V> {
 
     INode<T,V> root = null;
 
     @Override
     public INode<T,V> getRoot() {
-        return null;
+        return root;
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return root == null;
     }
 
     @Override
     public void clear() {
-
+        root = null;
     }
 
     @Override
@@ -156,6 +158,8 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 
     @Override
     public boolean delete(T key) {
+        if(key == null)
+            throw new RuntimeErrorException(new Error("Can't delete null key"));
         return delete( Find(root,key));
 
     }

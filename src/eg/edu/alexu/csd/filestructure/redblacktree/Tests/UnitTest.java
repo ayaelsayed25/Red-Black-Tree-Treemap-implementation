@@ -464,7 +464,7 @@ public class UnitTest {
 			redBlackTree.delete(null);
 			Assert.fail("Fail to handle deletion with null parameter");
 		} catch (RuntimeErrorException ex) {
-			
+
 		} catch (Throwable e) {
 			TestRunner.fail("Fail to handle deletion with null parameter", e);
 		}
