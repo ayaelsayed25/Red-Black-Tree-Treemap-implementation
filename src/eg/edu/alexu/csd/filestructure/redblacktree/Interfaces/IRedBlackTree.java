@@ -1,4 +1,4 @@
-package Interfaces;
+package eg.edu.alexu.csd.filestructure.redblacktree.Interfaces;
 
 
 public interface IRedBlackTree<T extends Comparable<T>, V> {
