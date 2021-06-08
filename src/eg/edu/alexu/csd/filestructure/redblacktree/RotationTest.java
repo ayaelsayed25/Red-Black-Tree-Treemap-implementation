@@ -1,7 +1,7 @@
 package eg.edu.alexu.csd.filestructure.redblacktree;
 
-import eg.edu.alexu.csd.filestructure.redblacktree.Interfaces.INode;
-import eg.edu.alexu.csd.filestructure.redblacktree.Interfaces.RedBlackTree;
+import eg.edu.alexu.csd.filestructure.redblacktree.Trees.INode;
+import eg.edu.alexu.csd.filestructure.redblacktree.Trees.RedBlackTree;
 import org.junit.Assert;
 import org.junit.Test;
 

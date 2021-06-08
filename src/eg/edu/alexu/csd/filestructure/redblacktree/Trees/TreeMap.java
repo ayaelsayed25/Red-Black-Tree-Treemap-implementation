@@ -1,4 +1,4 @@
-package eg.edu.alexu.csd.filestructure.redblacktree.Interfaces;
+package eg.edu.alexu.csd.filestructure.redblacktree.Trees;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
+    RedBlackTree<T,V> root = new RedBlackTree<>();
     @Override
     public Map.Entry<T, V> ceilingEntry(T key) {
         return null;
@@ -48,6 +49,7 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
 
     @Override
     public Map.Entry<T, V> floorEntry(T key) {
+//        Node<T,V> node = root.Fin;
         return null;
     }
 
