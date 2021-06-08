@@ -1,4 +1,4 @@
-package eg.edu.alexu.csd.filestructure.redblacktree.Interfaces;
+package eg.edu.alexu.csd.filestructure.redblacktree.Trees;
 
 public interface INode<T extends Comparable<T>, V> {
     static final boolean RED   = true;
