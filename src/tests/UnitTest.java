@@ -1,15 +1,31 @@
-package eg.edu.alexu.csd.filestructure.redblacktree.Tests;
+package tests;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Queue;
+import java.util.Random;
+import java.util.Set;
+import java.util.TreeMap;
+
+import javax.management.RuntimeErrorException;
 
 import eg.edu.alexu.csd.filestructure.redblacktree.Trees.INode;
 import eg.edu.alexu.csd.filestructure.redblacktree.Trees.IRedBlackTree;
 import eg.edu.alexu.csd.filestructure.redblacktree.Trees.ITreeMap;
+import org.hamcrest.core.IsInstanceOf;
 import org.junit.Assert;
 import org.junit.Test;
-
-import javax.management.RuntimeErrorException;
-import java.lang.reflect.Field;
-import java.util.*;
-import java.util.Map.Entry;
 
 
 public class UnitTest {
@@ -464,7 +480,7 @@ public class UnitTest {
 			redBlackTree.delete(null);
 			Assert.fail("Fail to handle deletion with null parameter");
 		} catch (RuntimeErrorException ex) {
-
+			
 		} catch (Throwable e) {
 			TestRunner.fail("Fail to handle deletion with null parameter", e);
 		}

@@ -25,4 +25,13 @@ public class MapEntry<T extends Comparable<T>, V> implements Map.Entry<T,V>{
         this.value = value;
         return oldVal;
     }
+    @Override
+    public boolean equals(Object e) {
+        return (this.getKey()==null ?
+                ((Map.Entry<T, V>) e).getKey()==null : this.getKey().equals(((Map.Entry<T, V>) e).getKey()))  &&
+                (this.getValue()==null ?
+                        ((Map.Entry<T, V>) e).getValue()==null : this.getValue().equals(((Map.Entry<T, V>) e).getValue()));
+
+    }
+
 }

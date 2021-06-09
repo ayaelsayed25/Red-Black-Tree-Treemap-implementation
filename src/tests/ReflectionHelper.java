@@ -1,4 +1,4 @@
-package eg.edu.alexu.csd.filestructure.redblacktree.Tests;
+package tests;
 
 import java.io.File;
 import java.io.IOException;

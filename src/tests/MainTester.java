@@ -1,9 +1,7 @@
-package eg.edu.alexu.csd.filestructure.redblacktree.Tests;
+package tests;
 
 import java.util.ArrayList;
 
-import eg.edu.alexu.csd.filestructure.redblacktree.Tests.IntegrationTest;
-import eg.edu.alexu.csd.filestructure.redblacktree.Tests.UnitTest;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
