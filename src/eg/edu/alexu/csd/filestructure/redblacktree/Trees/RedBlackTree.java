@@ -27,15 +27,18 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
     }
 
     @Override
-    public V search(T key) {
-        INode<T,V> node = search(root,key);
-        if(node != nil)
-            return node.getValue();
+    public V search (T key) {
+            INode<T, V> node = search(root, key);
+            if (node != null)
+                return node.getValue();
         return null;
     }
 
 
     protected INode<T,V> search(INode<T,V> root, T key) {
+        if (key == null) {
+            throw new RuntimeErrorException(new Error("Can't find null key"));
+        }
         if (root == nil){
             return null;
         }
@@ -52,6 +55,9 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 
 
     private boolean contains(INode<T,V> root, T key) {
+        if (key == null) {
+            throw new RuntimeErrorException(new Error("Tree doesn't contain null key"));
+        }
         if (root != nil) {
             if (root.getKey().compareTo(key) == 0) {
                 return true;
