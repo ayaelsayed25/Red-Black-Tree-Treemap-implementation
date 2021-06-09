@@ -69,7 +69,7 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
 
     @Override
     public V get(T key) {
-        return this.root.search(key);
+        return (V) this.root.search(key);
     }
 
     @Override
