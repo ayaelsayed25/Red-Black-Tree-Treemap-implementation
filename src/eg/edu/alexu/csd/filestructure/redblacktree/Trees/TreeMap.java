@@ -22,6 +22,7 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
     @Override
     public void clear() {
         this.size = 0;
+        this.root.clear();
     }
 
     @Override
@@ -88,6 +89,8 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
         Map.Entry<T,V> predecessor = floorEntry(key);
         if(predecessor != null)
             return predecessor.getKey();
+        if (this.size == 0)
+            throw new NullPointerException();
         return null;
     }
 
@@ -182,6 +185,10 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
 
     @Override
     public Collection<V> values() {
-        return null;
+        List<V> values = new ArrayList<>();
+        List<MapEntry<T,V>> entries = root.getEntries();
+        for(MapEntry<T,V> entry : entries)
+            values.add(entry.getValue());
+        return values;
     }
 }
