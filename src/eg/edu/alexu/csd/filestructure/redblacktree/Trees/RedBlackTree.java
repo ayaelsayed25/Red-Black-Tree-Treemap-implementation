@@ -4,31 +4,68 @@ import javax.management.RuntimeErrorException;
 
 public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T,V> {
 
-    INode<T,V> root = null;
+     private INode<T,V> root = null;
 
     @Override
-    public INode<T,V> getRoot() {
-        return root;
+    public INode getRoot() {
+        return this.root;
     }
 
     @Override
     public boolean isEmpty() {
-        return root == null;
+        return this.root == null;
     }
 
     @Override
     public void clear() {
-        root = null;
+         this.root = null;
     }
 
     @Override
-    public V search(T key) {
-        return null;
+    public Object search(Comparable key) {
+        if (root==null){
+            return null;
+        }
+        if (this.root.getKey().compareTo((T) key) == 0) {
+            return this.root.getValue();
+        } else {
+            return this.root.getKey().compareTo((T) key) < 0 ? this.search(this.root.getRightChild(), key) : this.search(this.root.getLeftChild(), key);
+        }
     }
 
     @Override
-    public boolean contains(T key) {
-        return false;
+    public boolean contains(Comparable key) {
+        if (root != null) {
+            if (this.root.getKey().compareTo((T) key) == 0) {
+                return true;
+            } else {
+                return this.root.getKey().compareTo((T) key) < 0 ? this.contains(this.root.getRightChild(), key) : this.contains(this.root.getLeftChild(), key);
+            }
+        }
+        else return false;
+    }
+
+    private Object search(INode root, Comparable key) {
+        if (root == null){
+            return null;
+        }
+            if (root.getKey().compareTo(key) == 0) {
+                return root.getValue();
+            } else {
+                return root.getKey().compareTo(key) < 0 ? this.search(root.getRightChild(), key) : this.search(root.getLeftChild(), key);
+            }
+    }
+
+    private boolean contains(INode root, Comparable key) {
+        if (root != null) {
+            if (root.getKey().compareTo(key) == 0) {
+                return true;
+            } else {
+                return root.getKey().compareTo(key) < 0 ? this.contains(root.getRightChild(), key) : this.contains(root.getLeftChild(), key);
+            }
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -143,7 +180,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
      */
     private void insertLeftRight(INode<T,V> newNode){
         rotateLeft(newNode.getParent());
-        insertLeftLeft(newNode);
+        insertLeftLeft(newNode.getLeftChild());
     }
     //Case Right Left : Uncle is Black, Inserted eg.edu.alexu.csd.filestructure.redblacktree.Interfaces.Node is a left child and its parent is a right child
     /*
@@ -152,7 +189,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
      */
     private void insertRightLeft(INode newNode){
         rotateRight(newNode.getParent());
-        insertRightRight(newNode);
+        insertRightRight(newNode.getRightChild());
     }
 
 
