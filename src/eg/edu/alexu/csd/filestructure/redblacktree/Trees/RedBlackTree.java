@@ -304,16 +304,16 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 //        return root;
 //    }
     protected INode<T,V> findMin(INode<T,V> node){
-        if(node == null)
+        if(node == nil)
             return null;
-        while (node.getLeftChild()!=null)
+        while (node.getLeftChild()!=nil)
             node = node.getLeftChild();
         return node;
     }
     protected INode<T,V> findMax(INode<T,V> node){
-        if(node == null)
+        if(node == nil)
             return null;
-        while (node.getRightChild()!=null)
+        while (node.getRightChild()!=nil)
             node = node.getRightChild();
         return node;
     }

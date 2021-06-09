@@ -138,14 +138,25 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
 
     @Override
     public Map.Entry<T, V> pollFirstEntry() {
-        //Note don't forget to decrease size if removed
-        size--;
+        Map.Entry<T, V> first = firstEntry();
+        if (first != null) {
+            remove(first.getKey());
+            keys.remove(first.getKey());
+            size--;
+            return first;
+        }
         return null;
     }
 
     @Override
     public Map.Entry<T, V> pollLastEntry() {
-        size--;
+        Map.Entry<T, V> last = lastEntry();
+        if (last != null) {
+            remove(last.getKey());
+            keys.remove(last.getKey());
+            size--;
+            return last;
+        }
         return null;
     }
 
@@ -163,7 +174,7 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
     @Override
     public void putAll(Map<T, V> map) {
         if(map == null)
-            throw new NullPointerException("The map to copy from is null");
+            throw new RuntimeErrorException(new Error("The map to copy from is null"));
         for (Map.Entry<T, V> e : map.entrySet()){
             this.put(e.getKey(), e.getValue());
         }
