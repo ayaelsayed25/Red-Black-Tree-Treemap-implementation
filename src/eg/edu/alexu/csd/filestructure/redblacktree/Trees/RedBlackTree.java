@@ -55,6 +55,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
             return root.getKey().compareTo(key) < 0 ? this.search(root.getRightChild(), key) : this.search(root.getLeftChild(), key);
         }
     }
+
     @Override
     public boolean contains(T key) {
         return contains(root,key);
@@ -379,7 +380,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         if(root == nil)
             return ;
         inorderTraverse(root.getLeftChild());
-        entries.add(new MapEntry<T,V>(root.getKey(),root.getValue()));
+        entries.add(new MapEntry<>(root.getKey(),root.getValue()));
         inorderTraverse(root.getRightChild());
     }
     public Set<Map.Entry<T, V>> getEntries(INode node) {

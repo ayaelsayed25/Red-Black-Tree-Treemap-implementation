@@ -6,7 +6,7 @@ import java.util.*;
 public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
     private int size =0;
     private final RedBlackTree<T,V> root = new RedBlackTree<>();
-    private final HashSet<T> keys = new HashSet<>();
+    private final TreeSet<T> keys = new TreeSet<T>();
 
     @Override
     public Map.Entry<T, V> ceilingEntry(T key) {
@@ -15,7 +15,7 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
 
     @Override
     public T ceilingKey(T key) {
-        return null;
+        return ceilingEntry(key).getKey();
     }
 
     @Override
@@ -26,7 +26,7 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
 
     @Override
     public boolean containsKey(T key) {
-        return false;
+        return root.contains(key);
     }
 
     @Override
@@ -100,12 +100,28 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
 
     @Override
     public ArrayList<Map.Entry<T, V>> headMap(T toKey) {
-        return null;
+        return getHeadMap(toKey,false);
     }
 
     @Override
     public ArrayList<Map.Entry<T, V>> headMap(T toKey, boolean inclusive) {
-        return null;
+        if(inclusive)
+            return getHeadMap(toKey,inclusive);
+        else
+            return getHeadMap(toKey,inclusive);
+    }
+
+    private ArrayList<Map.Entry<T, V>> getHeadMap(T toKey, boolean inclusive){
+        INode node=root.search(root.getRoot(),toKey);
+        ArrayList<Map.Entry<T, V>> head;
+        if(!inclusive)
+           head= new ArrayList<>(root.getEntries(node.getLeftChild()));
+        else {
+            head = new ArrayList<>(root.getEntries(node.getLeftChild()));
+            head.add(new MapEntry<>(node.getKey(),node.getValue()));
+        }
+        return head;
+
     }
     /**
      * Returns a Set view of the keys contained in this map.
