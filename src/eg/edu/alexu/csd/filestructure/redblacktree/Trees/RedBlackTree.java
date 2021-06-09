@@ -1,19 +1,17 @@
 package eg.edu.alexu.csd.filestructure.redblacktree.Trees;
 
 import javax.management.RuntimeErrorException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.TreeMap;
 
 public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T, V> {
     private final INode<T, V> nil = new Node<>();
     private INode<T, V> root;
-    private List<MapEntry<T,V>> entries;
+    private Set<MapEntry<T,V>> entries;
 
     public RedBlackTree() {
         root = nil;
-        entries = new ArrayList<>();
+        entries = new HashSet<>();
     }
 
 
@@ -383,7 +381,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         inorderTraverse(root.getRightChild());
     }
 
-    public List<MapEntry<T, V>> getEntries() {
+    public Set<MapEntry<T, V>> getEntries() {
         inorderTraverse(root);
         return entries;
     }

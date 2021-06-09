@@ -197,7 +197,7 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
     @Override
     public Collection<V> values() {
         List<V> values = new ArrayList<>();
-        List<MapEntry<T,V>> entries = root.getEntries();
+        Set<MapEntry<T,V>> entries = root.getEntries();
         for(MapEntry<T,V> entry : entries)
             values.add(entry.getValue());
         return values;
