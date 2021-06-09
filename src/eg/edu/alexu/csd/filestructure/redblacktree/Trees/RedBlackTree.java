@@ -362,7 +362,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         if(root == nil)
             return ;
         inorderTraverse(root.getLeftChild());
-        entries.add(new MapEntry<T,V>(root.getKey(),root.getValue()));
+        entries.add(new MapEntry<>(root.getKey(),root.getValue()));
         inorderTraverse(root.getRightChild());
     }
     public Set<Map.Entry<T, V>> getEntries(INode node) {
