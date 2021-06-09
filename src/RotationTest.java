@@ -89,10 +89,9 @@ public class RotationTest {
 
 
     }
-
+    RedBlackTree redBlackTree = new RedBlackTree();
     @Test
     public void test2(){
-        RedBlackTree redBlackTree = new RedBlackTree();
         Random r = new Random();
         for(int i = 0; i < 100; i++) {
             int key = r.nextInt(100000);
@@ -100,5 +99,14 @@ public class RotationTest {
         }
         redBlackTree.insert(null, "soso");
         Assert.fail();
+    }
+    @Test
+    public void testLeftRightInsertion(){
+        redBlackTree.insert(41, "soso");
+        redBlackTree.insert(38, "soso");
+        redBlackTree.insert(31, "soso");
+        redBlackTree.insert(12, "soso");
+        redBlackTree.insert(19, "soso");
+        redBlackTree.insert(8, "soso");
     }
 }

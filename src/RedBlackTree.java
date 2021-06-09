@@ -144,7 +144,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
      */
     private void insertLeftRight(INode<T,V> newNode){
         rotateLeft(newNode.getParent());
-        insertLeftLeft(newNode);
+        insertLeftLeft(newNode.getLeftChild());
     }
     //Case Right Left : Uncle is Black, Inserted Node is a left child and its parent is a right child
     /*
@@ -153,7 +153,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
      */
     private void insertRightLeft(INode newNode){
         rotateRight(newNode.getParent());
-        insertRightRight(newNode);
+        insertRightRight(newNode.getRightChild());
     }
 
 
