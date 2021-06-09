@@ -209,31 +209,31 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
     }
 
     private boolean delete(INode<T, V> deletedNode) {
-        if (deletedNode == null)
+        if (deletedNode.isNull())
             return false;
         //TODO if parent is null (root case) //1
-        if(deletedNode.getLeftChild() == null && deletedNode.getRightChild() == null){
+        if(deletedNode.getLeftChild().isNull() && deletedNode.getRightChild().isNull()){
             if(!deletedNode.getColor()){
                 doubleBlack(deletedNode);
             }
-            if(deletedNode.getParent()!=null){
+            if(deletedNode.getParent() != null){
                 if(((Node<T,V>)deletedNode).isChildLeft())
-                    deletedNode.getParent().setLeftChild(null);
+                    deletedNode.getParent().setLeftChild(new Node<T, V>());
                 else
-                    deletedNode.getParent().setRightChild(null);
+                    deletedNode.getParent().setRightChild(new Node<T, V>());
             }
         }
-        else if(deletedNode.getLeftChild() == null){
+        else if(deletedNode.getLeftChild().isNull()){
             if(!deletedNode.getColor())
                 deletedNode.getRightChild().setColor(false);
-            if(deletedNode.getParent()!=null)
-            deletedNode.getParent().setRightChild(deletedNode.getRightChild());
+            if(deletedNode.getParent() != null)
+                deletedNode.getParent().setRightChild(deletedNode.getRightChild());
         }
-        else if(deletedNode.getRightChild() == null){
+        else if(deletedNode.getRightChild().isNull()){
             if(!deletedNode.getColor())
                 deletedNode.getLeftChild().setColor(false);
-            if(deletedNode.getParent()!=null)
-            deletedNode.getParent().setLeftChild(deletedNode.getLeftChild());
+            if(deletedNode.getParent() != null)
+                deletedNode.getParent().setLeftChild(deletedNode.getLeftChild());
         }
         else {
             INode<T,V> predecessor = findMin(deletedNode.getRightChild());
@@ -351,12 +351,12 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
             }
         }
         // if black sibling + at least one red child{near & far > rotations} //1
-        else if((sibling.getLeftChild()!=null && sibling.getLeftChild().getColor())){
+        else if((!sibling.getLeftChild().isNull() && sibling.getLeftChild().getColor())){
             if(!((Node<T,V>)sibling).isChildLeft())
                 rotateLeft(sibling);
             rotateRight(sibling.getParent());
         }
-        else if((sibling.getRightChild()!=null && sibling.getRightChild().getColor())){
+        else if((!sibling.getRightChild().isNull() && sibling.getRightChild().getColor())){
             if(((Node<T,V>)sibling).isChildLeft())
                rotateRight(sibling);
             rotateLeft(sibling.getParent());
@@ -364,19 +364,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
     }
     private boolean checkCase2(INode<T, V> sibling)
     {
-        if(sibling.getLeftChild() == null && sibling.getRightChild() == null)
-            return true;
-        else if(sibling.getRightChild() == null)
-        {
-            if(!sibling.getLeftChild().getColor())
-                return true;
-        }
-        else if(sibling.getLeftChild() == null)
-        {
-            if(!sibling.getRightChild().getColor())
-                return true;
-        }
-        else if(!sibling.getRightChild().getColor() && !sibling.getLeftChild().getColor())
+        if((sibling.getLeftChild().isNull() || !sibling.getLeftChild().getColor()) && (sibling.getRightChild().isNull() || !sibling.getRightChild().getColor()))
             return true;
         return false;
     }
