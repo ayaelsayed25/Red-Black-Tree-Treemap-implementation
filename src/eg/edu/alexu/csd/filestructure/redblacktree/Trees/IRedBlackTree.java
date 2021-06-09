@@ -1,8 +1,6 @@
 package eg.edu.alexu.csd.filestructure.redblacktree.Trees;
 
-
 public interface IRedBlackTree<T extends Comparable<T>, V> {
-
     /**
      * return the root of the given Red black tree.
      * @return root.
@@ -49,8 +47,5 @@ public interface IRedBlackTree<T extends Comparable<T>, V> {
      * @return true in case of success and false otherwise.
      */
     public boolean delete(T key);
-
-
-
 
 }

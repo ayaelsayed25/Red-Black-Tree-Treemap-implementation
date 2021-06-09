@@ -1,11 +1,14 @@
 package eg.edu.alexu.csd.filestructure.redblacktree.Trees;
 
+import javax.management.RuntimeErrorException;
 import java.util.*;
 
 public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
     private int size =0;
     private final RedBlackTree<T,V> root = new RedBlackTree<>();
     private final HashSet<T> keys = new HashSet<>();
+    private final HashSet<Map.Entry<T,V>> entries = new HashSet<>();
+
     @Override
     public Map.Entry<T, V> ceilingEntry(T key) {
         return null;
@@ -19,6 +22,7 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
     @Override
     public void clear() {
         this.size = 0;
+        this.root.clear();
     }
 
     @Override
@@ -33,7 +37,7 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
 
     @Override
     public Set<Map.Entry<T, V>> entrySet() {
-        return null;
+        return entries;
     }
 
     @Override
@@ -85,6 +89,8 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
         Map.Entry<T,V> predecessor = floorEntry(key);
         if(predecessor != null)
             return predecessor.getKey();
+        if (this.size == 0)
+            throw new NullPointerException();
         return null;
     }
 
@@ -132,38 +138,53 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
 
     @Override
     public Map.Entry<T, V> pollFirstEntry() {
-        //Note don't forget to decrease size if removed
-        size--;
+        Map.Entry<T, V> first = firstEntry();
+        if (first != null) {
+            remove(first.getKey());
+            keys.remove(first.getKey());
+            size--;
+            return first;
+        }
         return null;
     }
 
     @Override
     public Map.Entry<T, V> pollLastEntry() {
-        size--;
+        Map.Entry<T, V> last = lastEntry();
+        if (last != null) {
+            remove(last.getKey());
+            keys.remove(last.getKey());
+            size--;
+            return last;
+        }
         return null;
     }
 
     @Override
     public void put(T key, V value) {
-        //don't forget to increase size
+        if (key == null){
+            throw new RuntimeErrorException(new Error("Can't put null key"));
+        }
+        root.insert(key,value);
         size++;
-        //code...
         keys.add(key);
+        entries.add(new MapEntry<>(key,value));
     }
 
     @Override
     public void putAll(Map<T, V> map) {
         if(map == null)
-            throw new NullPointerException("The map to copy from is null");
+            throw new RuntimeErrorException(new Error("The map to copy from is null"));
         for (Map.Entry<T, V> e : map.entrySet()){
             this.put(e.getKey(), e.getValue());
-            size++;
         }
     }
 
     @Override
     public boolean remove(T key) {
-        //don't forget to decrease size
+        entries.remove(new MapEntry<>(key,get(key)));
+        keys.remove(key);
+        root.delete(key);
         size--;
         return false;
     }
@@ -175,6 +196,10 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
 
     @Override
     public Collection<V> values() {
-        return null;
+        List<V> values = new ArrayList<>();
+        Set<MapEntry<T,V>> entries = root.getEntries();
+        for(MapEntry<T,V> entry : entries)
+            values.add(entry.getValue());
+        return values;
     }
 }
