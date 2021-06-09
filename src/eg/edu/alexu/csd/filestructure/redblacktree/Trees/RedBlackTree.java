@@ -204,27 +204,33 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 
     @Override
     public boolean delete(T key) {
+        //TODO Stackflow ???
+        //TODO sibling null ??
+        System.out.println("before deletion");
+        inOrder(root);
+        System.out.println("IAM DELETING "+key);
+
         if(key == null)
             throw new RuntimeErrorException(new Error("Can't delete null key"));
-        return delete( search(root,key));
+//        return delete( search(root,key));
+        //TODO fix
+        boolean returnV = delete( search(root,key));
+        System.out.println("After deletion");
+        inOrder(root);
+        return returnV;
 
     }
 
     private boolean delete(INode<T, V> deletedNode) {
-        if (deletedNode.isNull())
+        if (deletedNode == null)
             return false;
         //TODO if parent is null (root case) //1
         if(deletedNode.getLeftChild().isNull() && deletedNode.getRightChild().isNull()){
+            deletedNode.setColor(false);
+            deletedNode.setKey(null);
+            deletedNode.setValue(null);
             if(!deletedNode.getColor()){
                 doubleBlack(deletedNode);
-            }
-            if(deletedNode.getParent() != null){
-                INode<T, V> node = new Node<T, V>();
-                node.setColor(false);
-                if(((Node<T,V>)deletedNode).isChildLeft())
-                    deletedNode.getParent().setLeftChild(node);
-                else
-                    deletedNode.getParent().setRightChild(node);
             }
         }
         else if(deletedNode.getLeftChild().isNull()){
@@ -240,13 +246,10 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
                 deletedNode.getParent().setLeftChild(deletedNode.getLeftChild());
         }
         else {
-            inOrder(root);
             INode<T,V> predecessor = findMin(deletedNode.getRightChild());
             deletedNode.setValue(predecessor.getValue());
             deletedNode.setKey(predecessor.getKey());
             delete(predecessor);
-            System.out.println("LALALA");
-            inOrder(root);
         }
         return true;
     }
@@ -325,9 +328,9 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
     }
     private void doubleBlack(INode<T,V> node) {
         //CASE 0: IF DB IS ROOT
-        if(node.getParent() == null)
-            return;
         INode<T, V> sibling = ((Node<T,V>)node).getSibling();
+        if(node.getParent() == null || sibling == null )
+            return;
         //CASE 1: IF SIBLING IS RED
         if(sibling.getColor())
         {
@@ -354,14 +357,22 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         }
         // if black sibling + at least one red child{near & far > rotations} //1
         else if((sibling.getLeftChild().getColor())){
-            if(!((Node<T,V>)sibling).isChildLeft())
-                rotateRight(sibling);
-            rotateLeft(sibling.getParent());
+            if(!((Node<T,V>)sibling).isChildLeft()){
+                sibling.setColor(true);
+                sibling.getLeftChild().setColor(false);
+                rotateLeft(sibling);
+            }
+            sibling.getLeftChild().setColor(false);
+            rotateRight(sibling.getParent());
         }
         else if((sibling.getRightChild().getColor())){
-            if(((Node<T,V>)sibling).isChildLeft())
-               rotateLeft(sibling);
-            rotateRight(sibling.getParent());
+            if(((Node<T,V>)sibling).isChildLeft()){
+                sibling.setColor(true);
+                sibling.getRightChild().setColor(false);
+                rotateRight(sibling);
+            }
+            sibling.getRightChild().setColor(false);
+            rotateLeft(sibling.getParent());
         }
     }
     private void inorderTraverse(INode<T,V> root){
@@ -375,8 +386,8 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         inorderTraverse(node);
         return entries;
     }
-    private void inOrder(INode<T,V> node){
-        if (node == null) {
+    public void inOrder(INode<T,V> node){
+        if (node.isNull()) {
             return;
         }
         inOrder(node.getLeftChild());
@@ -386,23 +397,31 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 
     public static void main(String[] args) {
         IRedBlackTree<Integer, String> redBlackTree = (IRedBlackTree<Integer, String>) TestRunner.getImplementationInstanceForInterface(IRedBlackTree.class);
+//        redBlackTree.insert(2, "soso");
+//			redBlackTree.insert(3, "soso");
+//			redBlackTree.insert(4, "soso");
+			redBlackTree.insert(6, "soso");
+             redBlackTree.insert(7, "soso");
+//			Assert.assertTrue(redBlackTree.delete(3));
+//        Assert.assertTrue(redBlackTree.delete(4));
+        Assert.assertTrue(redBlackTree.delete(6));
+//        try {
+//            Random r = new Random();
+//            HashSet<Integer> list = new HashSet<>();
+//            for (int i = 0; i < 5; i++) {
+//                int key = r.nextInt(10);
+//                list.add(key);
+//                redBlackTree.insert(key, "soso" + key);
+//            }
+//
+//            for (Integer elem : list)
+//                Assert.assertTrue(redBlackTree.delete(elem));
+//            INode<Integer, String> node = redBlackTree.getRoot();
+//            if (!(node == null || node.isNull()))
+//                Assert.fail();
+//        } catch (Throwable e) {
+//            TestRunner.fail("Fail to handle deletion", e);
+//        }
 
-        try {
-            Random r = new Random();
-            HashSet<Integer> list = new HashSet<>();
-            for (int i = 0; i < 5; i++) {
-                int key = r.nextInt(10000);
-                list.add(key);
-                redBlackTree.insert(key, "soso" + key);
-            }
-
-            for (Integer elem : list)
-                Assert.assertTrue(redBlackTree.delete(elem));
-            INode<Integer, String> node = redBlackTree.getRoot();
-            if (!(node == null || node.isNull()))
-                Assert.fail();
-        } catch (Throwable e) {
-            TestRunner.fail("Fail to handle deletion", e);
-        }
     }
 }
