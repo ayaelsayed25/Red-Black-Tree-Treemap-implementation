@@ -497,13 +497,13 @@ public class UnitTest {
 		try {
 			Random r = new Random();
 			HashSet<Integer> list = new HashSet<>();
-			for (int i = 0; i < 100000; i++) {
+			for (int i = 0; i < 5; i++) {
 				int key = r.nextInt(10000);
 				list.add(key);
 				redBlackTree.insert(key, "soso" + key);
 			}
-			
-			for (Integer elem : list) 
+
+			for (Integer elem : list)
 				Assert.assertTrue(redBlackTree.delete(elem));
 			INode<Integer, String> node = redBlackTree.getRoot();
 			if (!(node == null || node.isNull()))
@@ -511,6 +511,28 @@ public class UnitTest {
 		} catch (Throwable e) {
 			TestRunner.fail("Fail to handle deletion", e);
 		}
+//		try {
+//			//case 1
+////			redBlackTree.insert(30, "soso");
+////			redBlackTree.insert(20, "soso");
+////			redBlackTree.insert(40, "soso");
+////			redBlackTree.insert(35, "soso");
+////			redBlackTree.insert(50, "soso");
+////			Assert.assertTrue(redBlackTree.delete(20));
+//			//case 1
+//			redBlackTree.insert(30, "soso");
+//			redBlackTree.insert(20, "soso");
+//			redBlackTree.insert(40, "soso");
+//			redBlackTree.insert(35, "soso");
+//			boolean returnV = redBlackTree.delete(20);
+//			Assert.assertTrue(returnV);
+//			INode<Integer, String> node = redBlackTree.getRoot();
+////			if (!(node == null || node.isNull()))
+////				Assert.fail();
+//
+//		} catch (Throwable e) {
+//			TestRunner.fail("Fail to handle deletion", e);
+//		}
 	}
 
 	/**
