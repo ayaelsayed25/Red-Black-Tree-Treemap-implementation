@@ -1,6 +1,7 @@
 package eg.edu.alexu.csd.filestructure.redblacktree;
 
 import eg.edu.alexu.csd.filestructure.redblacktree.Trees.INode;
+import eg.edu.alexu.csd.filestructure.redblacktree.Trees.IRedBlackTree;
 import eg.edu.alexu.csd.filestructure.redblacktree.Trees.RedBlackTree;
 import org.junit.Assert;
 import org.junit.Test;
@@ -91,7 +92,7 @@ public class RotationTest {
 
 
     }
-    RedBlackTree redBlackTree = new RedBlackTree();
+    IRedBlackTree redBlackTree = new RedBlackTree();
     @Test
     public void test2(){
         Random r = new Random();
@@ -104,11 +105,12 @@ public class RotationTest {
     }
     @Test
     public void testLeftRightInsertion(){
-        redBlackTree.insert(41, "soso");
-        redBlackTree.insert(38, "soso");
+        redBlackTree.insert(11, "soso");
         redBlackTree.insert(31, "soso");
         redBlackTree.insert(12, "soso");
         redBlackTree.insert(19, "soso");
         redBlackTree.insert(8, "soso");
+        redBlackTree.insert("55", "soso");
+        Assert.fail();
     }
 }
