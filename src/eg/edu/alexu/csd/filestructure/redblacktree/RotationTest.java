@@ -1,5 +1,7 @@
-import Interfaces.INode;
-import Interfaces.IRedBlackTree;
+package eg.edu.alexu.csd.filestructure.redblacktree;
+
+import eg.edu.alexu.csd.filestructure.redblacktree.Trees.INode;
+import eg.edu.alexu.csd.filestructure.redblacktree.Trees.RedBlackTree;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -13,29 +15,29 @@ public class RotationTest {
     @Test
     public void test() {
 
-//        INode<Integer, Integer> root = new Node();
+//        INode<Integer, Integer> root = new eg.edu.alexu.csd.filestructure.redblacktree.Interfaces.Node();
 //        root.setKey(20);
-//        INode<Integer, Integer> node1 = new Node();
+//        INode<Integer, Integer> node1 = new eg.edu.alexu.csd.filestructure.redblacktree.Interfaces.Node();
 //        node1.setKey(9);
-//        INode<Integer, Integer> node2 = new Node();
+//        INode<Integer, Integer> node2 = new eg.edu.alexu.csd.filestructure.redblacktree.Interfaces.Node();
 //        node2.setKey(6);
-//        INode<Integer, Integer> node3 = new Node();
+//        INode<Integer, Integer> node3 = new eg.edu.alexu.csd.filestructure.redblacktree.Interfaces.Node();
 //        node3.setKey(12);
-//        INode<Integer, Integer> node4 = new Node();
+//        INode<Integer, Integer> node4 = new eg.edu.alexu.csd.filestructure.redblacktree.Interfaces.Node();
 //        node4.setKey(1);
-//        INode<Integer, Integer> node5 = new Node();
+//        INode<Integer, Integer> node5 = new eg.edu.alexu.csd.filestructure.redblacktree.Interfaces.Node();
 //        node5.setKey(25);
-//        INode<Integer, Integer> node6 = new Node();
+//        INode<Integer, Integer> node6 = new eg.edu.alexu.csd.filestructure.redblacktree.Interfaces.Node();
 //        node6.setKey(31);
-//        INode<Integer, Integer> node7 = new Node();
+//        INode<Integer, Integer> node7 = new eg.edu.alexu.csd.filestructure.redblacktree.Interfaces.Node();
 //        node7.setKey(8);
-//        INode<Integer, Integer> node8 = new Node();
+//        INode<Integer, Integer> node8 = new eg.edu.alexu.csd.filestructure.redblacktree.Interfaces.Node();
 //        node8.setKey(10);
-//        INode<Integer, Integer> node10 = new Node();
+//        INode<Integer, Integer> node10 = new eg.edu.alexu.csd.filestructure.redblacktree.Interfaces.Node();
 //        node10.setKey(2);
-//        INode<Integer, Integer> node11 = new Node();
+//        INode<Integer, Integer> node11 = new eg.edu.alexu.csd.filestructure.redblacktree.Interfaces.Node();
 //        node11.setKey(5);
-//        INode<Integer, Integer> node12 = new Node();
+//        INode<Integer, Integer> node12 = new eg.edu.alexu.csd.filestructure.redblacktree.Interfaces.Node();
 //        node12.setKey(30);
 //        root.setLeftChild(node11);
 //        root.setRightChild(node12);

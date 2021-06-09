@@ -1,7 +1,6 @@
-import Interfaces.INode;
-import Interfaces.IRedBlackTree;
+package eg.edu.alexu.csd.filestructure.redblacktree.Trees;
 
-import java.security.Key;
+import javax.management.RuntimeErrorException;
 
 public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T,V> {
 
@@ -9,17 +8,17 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 
     @Override
     public INode<T,V> getRoot() {
-        return null;
+        return root;
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return root == null;
     }
 
     @Override
     public void clear() {
-
+        root = null;
     }
 
     @Override
@@ -45,7 +44,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         insertCases(newNode);                           //Insertion Cases
     }
     /**
-     * Insert new Node in Binary Search Tree
+     * Insert new eg.edu.alexu.csd.filestructure.redblacktree.Interfaces.Node in Binary Search Tree
      * @param newNode
      */
     private void insertNode(INode<T,V> root,INode<T,V> newNode) {
@@ -122,7 +121,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         }
 
     }
-    //Case 3: Uncle is Black, Inserted Node is a left child
+    //Case 3: Uncle is Black, Inserted eg.edu.alexu.csd.filestructure.redblacktree.Interfaces.Node is a left child
     /*
      * Parent is left , right rotate
      * Parent is right , left rotate
@@ -137,7 +136,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         newNode.getParent().getParent().setColor(true);
         rotateLeft(newNode.getParent().getParent());
     }
-    //Case Left Right : Uncle is Black, Inserted Node is a right child and its parent is a left child
+    //Case Left Right : Uncle is Black, Inserted eg.edu.alexu.csd.filestructure.redblacktree.Interfaces.Node is a right child and its parent is a left child
     /*
      * Parent is left , parent left rotate
      * Go to case Left Left
@@ -146,7 +145,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         rotateLeft(newNode.getParent());
         insertLeftLeft(newNode.getLeftChild());
     }
-    //Case Right Left : Uncle is Black, Inserted Node is a left child and its parent is a right child
+    //Case Right Left : Uncle is Black, Inserted eg.edu.alexu.csd.filestructure.redblacktree.Interfaces.Node is a left child and its parent is a right child
     /*
      * Parent is right , parent right rotate
      * Go to Case Right Right
@@ -159,6 +158,8 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 
     @Override
     public boolean delete(T key) {
+        if(key == null)
+            throw new RuntimeErrorException(new Error("Can't delete null key"));
         return delete( Find(root,key));
 
     }
@@ -192,6 +193,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         else {
             INode<T,V> predecessor = findMin(deletedNode.getRightChild());
             deletedNode.setValue(predecessor.getValue());
+            deletedNode.setKey(predecessor.getKey());
             delete(predecessor);
         }
         return true;
