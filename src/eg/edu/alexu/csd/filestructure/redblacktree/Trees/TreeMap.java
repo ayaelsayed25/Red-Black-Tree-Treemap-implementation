@@ -1,11 +1,14 @@
 package eg.edu.alexu.csd.filestructure.redblacktree.Trees;
 
+import javax.management.RuntimeErrorException;
 import java.util.*;
 
 public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
     private int size =0;
     private final RedBlackTree<T,V> root = new RedBlackTree<>();
     private final HashSet<T> keys = new HashSet<>();
+    private final HashSet<Map.Entry<T,V>> entries = new HashSet<>();
+
     @Override
     public Map.Entry<T, V> ceilingEntry(T key) {
         return null;
@@ -33,7 +36,7 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
 
     @Override
     public Set<Map.Entry<T, V>> entrySet() {
-        return null;
+        return entries;
     }
 
     @Override
@@ -145,10 +148,13 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
 
     @Override
     public void put(T key, V value) {
-        //don't forget to increase size
+        if (key == null){
+            throw new RuntimeErrorException(new Error("Can't put null key"));
+        }
+        root.insert(key,value);
         size++;
-        //code...
         keys.add(key);
+        entries.add(new MapEntry<>(key,value));
     }
 
     @Override
@@ -157,13 +163,14 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
             throw new NullPointerException("The map to copy from is null");
         for (Map.Entry<T, V> e : map.entrySet()){
             this.put(e.getKey(), e.getValue());
-            size++;
         }
     }
 
     @Override
     public boolean remove(T key) {
-        //don't forget to decrease size
+        entries.remove(new MapEntry<>(key,get(key)));
+        keys.remove(key);
+        root.delete(key);
         size--;
         return false;
     }
