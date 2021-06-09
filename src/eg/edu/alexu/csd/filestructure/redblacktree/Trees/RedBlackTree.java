@@ -7,11 +7,11 @@ import java.util.TreeMap;
 public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T, V> {
     private final INode<T, V> nil = new Node<>();
     private INode<T, V> root;
-    private Set<MapEntry<T,V>> entries;
+    private final Set<Map.Entry<T,V>> entries;
 
     public RedBlackTree() {
         root = nil;
-        entries = new HashSet<>();
+        entries = new LinkedHashSet<>();
     }
 
 
@@ -377,11 +377,11 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         if(root == nil)
             return ;
         inorderTraverse(root.getLeftChild());
-        entries.add(new MapEntry<>(root.getKey(),root.getValue()));
+        entries.add(new MapEntry<T,V>(root.getKey(),root.getValue()));
         inorderTraverse(root.getRightChild());
     }
 
-    public Set<MapEntry<T, V>> getEntries() {
+    public Set<Map.Entry<T, V>> getEntries() {
         inorderTraverse(root);
         return entries;
     }

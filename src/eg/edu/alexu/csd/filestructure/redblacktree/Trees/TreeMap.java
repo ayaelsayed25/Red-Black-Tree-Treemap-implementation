@@ -7,7 +7,6 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
     private int size =0;
     private final RedBlackTree<T,V> root = new RedBlackTree<>();
     private final HashSet<T> keys = new HashSet<>();
-    private final HashSet<Map.Entry<T,V>> entries = new HashSet<>();
 
     @Override
     public Map.Entry<T, V> ceilingEntry(T key) {
@@ -37,7 +36,7 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
 
     @Override
     public Set<Map.Entry<T, V>> entrySet() {
-        return entries;
+        return root.getEntries();
     }
 
     @Override
@@ -168,7 +167,6 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
         root.insert(key,value);
         size++;
         keys.add(key);
-        entries.add(new MapEntry<>(key,value));
     }
 
     @Override
@@ -182,7 +180,6 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
 
     @Override
     public boolean remove(T key) {
-        entries.remove(new MapEntry<>(key,get(key)));
         keys.remove(key);
         root.delete(key);
         size--;
@@ -197,8 +194,8 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
     @Override
     public Collection<V> values() {
         List<V> values = new ArrayList<>();
-        Set<MapEntry<T,V>> entries = root.getEntries();
-        for(MapEntry<T,V> entry : entries)
+        Set<Map.Entry<T,V>> entries = root.getEntries();
+        for(Map.Entry<T,V> entry : entries)
             values.add(entry.getValue());
         return values;
     }
