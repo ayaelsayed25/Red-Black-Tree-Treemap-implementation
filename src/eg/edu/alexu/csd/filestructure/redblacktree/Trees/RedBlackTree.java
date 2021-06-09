@@ -52,6 +52,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
             return root.getKey().compareTo(key) < 0 ? this.search(root.getRightChild(), key) : this.search(root.getLeftChild(), key);
         }
     }
+
     @Override
     public boolean contains(T key) {
         return contains(root,key);

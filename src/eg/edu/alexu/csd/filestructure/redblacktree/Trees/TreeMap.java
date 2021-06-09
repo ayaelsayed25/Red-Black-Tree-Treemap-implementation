@@ -6,7 +6,7 @@ import java.util.*;
 public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
     private int size =0;
     private final RedBlackTree<T,V> root = new RedBlackTree<>();
-    private final HashSet<T> keys = new HashSet<>();
+    private final TreeSet<T> keys = new TreeSet<T>();
 
     @Override
     public Map.Entry<T, V> ceilingEntry(T key) {
@@ -15,7 +15,7 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
 
     @Override
     public T ceilingKey(T key) {
-        return null;
+        return ceilingEntry(key).getKey();
     }
 
     @Override
