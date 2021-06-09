@@ -160,7 +160,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
     public boolean delete(T key) {
         if(key == null)
             throw new RuntimeErrorException(new Error("Can't delete null key"));
-        return delete( Find(root,key));
+        return delete( search(root,key));
 
     }
     private boolean delete(INode<T,V> deletedNode){
@@ -249,19 +249,21 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         rotateNode.setParent(node);
     }
 
-    private INode<T,V> Find(INode<T,V> root,T key){
+    protected INode<T,V> search(INode<T,V> root,T key){
         if(root == null)
             return null;
         if(key.compareTo(root.getKey()) < 0)
-             return Find(root.getLeftChild(),key);
+             return search(root.getLeftChild(),key);
         else if(key.compareTo(root.getKey()) > 0)
-            return Find(root.getRightChild(),key);
+            return search(root.getRightChild(),key);
         return root;
     }
-    private INode<T,V> findMin(INode<T,V> node){
-        if(node.getLeftChild() == null)
-            return node;
-        return findMin(node.getLeftChild());
+    protected INode<T,V> findMin(INode<T,V> node){
+        if(node == null)
+            return null;
+        while (node.getLeftChild()!=null)
+            node = node.getLeftChild();
+        return node;
     }
     private void doubleBlack(INode<T,V> node) {
         //CASE 0: IF DB IS ROOT

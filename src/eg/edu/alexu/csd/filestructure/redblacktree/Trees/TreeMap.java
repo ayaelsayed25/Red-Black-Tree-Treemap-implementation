@@ -39,17 +39,25 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
 
     @Override
     public Map.Entry<T, V> firstEntry() {
-        return null;
+        INode<T,V> min = root.findMin(root.getRoot());
+        if(min == null) return null;
+        return new MapEntry<>(min.getKey(),min.getValue());
     }
 
     @Override
     public T firstKey() {
-        return null;
+        INode<T,V> min = root.findMin(root.getRoot());
+        if(min == null)
+         return null;
+        return min.getKey();
     }
 
     @Override
     public Map.Entry<T, V> floorEntry(T key) {
-//        Node<T,V> node = root.Fin;
+        INode<T,V> node = root.search(root.getRoot(),key);
+        if(node == null)
+            return null;
+
         return null;
     }
 
