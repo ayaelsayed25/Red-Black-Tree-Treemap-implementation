@@ -22,14 +22,14 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
     }
 
     @Override
-    public Object search(Comparable key) {
+    public V search(Comparable key) {
         if (root==null){
             return null;
         }
         if (this.root.getKey().compareTo((T) key) == 0) {
             return this.root.getValue();
         } else {
-            return this.root.getKey().compareTo((T) key) < 0 ? this.search(this.root.getRightChild(), key) : this.search(this.root.getLeftChild(), key);
+            return (V) (this.root.getKey().compareTo((T) key) < 0 ? this.search((Node)this.root.getRightChild(), key) : this.search((Node)this.root.getLeftChild(), key));
         }
     }
 
@@ -45,14 +45,14 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         else return false;
     }
 
-    private Object search(INode root, Comparable key) {
+    private Object search(Node root, Comparable key) {
         if (root == null){
             return null;
         }
             if (root.getKey().compareTo(key) == 0) {
                 return root.getValue();
             } else {
-                return root.getKey().compareTo(key) < 0 ? this.search(root.getRightChild(), key) : this.search(root.getLeftChild(), key);
+                return root.getKey().compareTo(key) < 0 ? this.search((Node)root.getRightChild(), key) : this.search((Node)root.getLeftChild(), key);
             }
     }
 
