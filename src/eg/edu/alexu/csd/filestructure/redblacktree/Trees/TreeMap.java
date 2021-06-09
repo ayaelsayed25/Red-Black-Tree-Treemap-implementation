@@ -7,6 +7,7 @@ import java.util.Set;
 
 public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
     RedBlackTree<T,V> root = new RedBlackTree<>();
+    private int size =0;
     @Override
     public Map.Entry<T, V> ceilingEntry(T key) {
         return null;
@@ -19,7 +20,7 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
 
     @Override
     public void clear() {
-
+        this.size = 0;
     }
 
     @Override
@@ -39,17 +40,25 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
 
     @Override
     public Map.Entry<T, V> firstEntry() {
-        return null;
+        INode<T,V> min = root.findMin(root.getRoot());
+        if(min == null) return null;
+        return new MapEntry<>(min.getKey(),min.getValue());
     }
 
     @Override
     public T firstKey() {
-        return null;
+        INode<T,V> min = root.findMin(root.getRoot());
+        if(min == null)
+         return null;
+        return min.getKey();
     }
 
     @Override
     public Map.Entry<T, V> floorEntry(T key) {
-//        Node<T,V> node = root.Fin;
+        INode<T,V> node = root.search(root.getRoot(),key);
+        if(node == null)
+            return null;
+
         return null;
     }
 
@@ -60,7 +69,7 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
 
     @Override
     public V get(T key) {
-        return null;
+        return this.root.search(key);
     }
 
     @Override
@@ -90,32 +99,43 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
 
     @Override
     public Map.Entry<T, V> pollFirstEntry() {
+        //Note don't forget to decrease size if removed
+        size--;
         return null;
     }
 
     @Override
     public Map.Entry<T, V> pollLastEntry() {
+        size--;
         return null;
     }
 
     @Override
     public void put(T key, V value) {
-
+        //don't forget to increase size
+        size++;
     }
 
     @Override
     public void putAll(Map<T, V> map) {
-
+        if(map == null)
+            throw new NullPointerException("The map to copy from is null");
+        for (Map.Entry<T, V> e : map.entrySet()){
+            this.put(e.getKey(), e.getValue());
+            size++;
+        }
     }
 
     @Override
     public boolean remove(T key) {
+        //don't forget to decrease size
+        size--;
         return false;
     }
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override

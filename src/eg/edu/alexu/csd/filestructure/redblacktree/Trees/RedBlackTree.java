@@ -18,50 +18,51 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 
     @Override
     public boolean isEmpty() {
-        return this.root == null;
+        return this.root == nil;
     }
 
     @Override
     public void clear() {
-        this.root = null;
+         this.root = nil;
     }
 
     @Override
     public Object search(Comparable key) {
-        if (root == null) {
+        if (root==nil){
             return null;
         }
         if (this.root.getKey().compareTo((T) key) == 0) {
             return this.root.getValue();
         } else {
-            return this.root.getKey().compareTo((T) key) < 0 ? this.search(this.root.getRightChild(), key) : this.search(this.root.getLeftChild(), key);
+            return (V) (this.root.getKey().compareTo((T) key) < 0 ? this.search((Node)this.root.getRightChild(), key) : this.search((Node)this.root.getLeftChild(), key));
         }
     }
 
     @Override
     public boolean contains(Comparable key) {
-        if (root != null) {
+        if (root != nil) {
             if (this.root.getKey().compareTo((T) key) == 0) {
                 return true;
             } else {
                 return this.root.getKey().compareTo((T) key) < 0 ? this.contains(this.root.getRightChild(), key) : this.contains(this.root.getLeftChild(), key);
             }
-        } else return false;
+        }
+        else return false;
     }
 
-    private Object search(INode root, Comparable key) {
-        if (root == null) {
+    private Object search(Node root, Comparable key) {
+        if (root == nil){
             return null;
         }
-        if (root.getKey().compareTo(key) == 0) {
-            return root.getValue();
-        } else {
-            return root.getKey().compareTo(key) < 0 ? this.search(root.getRightChild(), key) : this.search(root.getLeftChild(), key);
-        }
+            if (root.getKey().compareTo(key) == 0) {
+                return root.getValue();
+            } else {
+                return root.getKey().compareTo(key) < 0 ? this.search((Node)root.getRightChild(), key) : this.search((Node)root.getLeftChild(), key);
+            }
     }
 
     private boolean contains(INode root, Comparable key) {
-        if (root != null) {
+        if (root != nil) {
             if (root.getKey().compareTo(key) == 0) {
                 return true;
             } else {
@@ -148,6 +149,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
             insertLeftLeft(newNode);
     }
 
+
     private void recoloring(INode<T, V> newNode) {
         INode<T, V> grandParent = newNode.getParent().getParent();
         grandParent.setColor(true);
@@ -181,8 +183,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         newNode.getParent().getParent().setColor(true);
         rotateLeft(newNode.getParent().getParent());
     }
-
-    //Case Left Right : Uncle is Black, Inserted is a right child and its parent is a left child
+    //Case Left Right : Uncle is Black, Inserted eg.edu.alexu.csd.filestructure.redblacktree.Interfaces.Node is a right child and its parent is a left child
     /*
      * Parent is left , parent left rotate
      * Go to case Left Left
@@ -197,7 +198,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
      * Parent is right , parent right rotate
      * Go to Case Right Right
      */
-    private void insertRightLeft(INode newNode) {
+    private void insertRightLeft(INode newNode){
         rotateRight(newNode.getParent());
         insertRightRight(newNode.getRightChild());
     }
@@ -205,9 +206,9 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 
     @Override
     public boolean delete(T key) {
-        if (key == null)
+        if(key == null)
             throw new RuntimeErrorException(new Error("Can't delete null key"));
-        return delete(Find(root, key));
+        return delete( search(root,key));
 
     }
 
@@ -215,28 +216,31 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         if (deletedNode == null)
             return false;
         //TODO if parent is null (root case) //1
-        if (deletedNode.getLeftChild() == null && deletedNode.getRightChild() == null) {
-            if (!deletedNode.getColor()) {
+        if(deletedNode.getLeftChild() == null && deletedNode.getRightChild() == null){
+            if(!deletedNode.getColor()){
                 doubleBlack(deletedNode);
             }
-            if (deletedNode.getParent() != null) {
-                if (((Node<T, V>) deletedNode).isChildLeft())
+            if(deletedNode.getParent()!=null){
+                if(((Node<T,V>)deletedNode).isChildLeft())
                     deletedNode.getParent().setLeftChild(null);
                 else
                     deletedNode.getParent().setRightChild(null);
             }
-        } else if (deletedNode.getLeftChild() == null) {
-            if (!deletedNode.getColor())
+        }
+        else if(deletedNode.getLeftChild() == null){
+            if(!deletedNode.getColor())
                 deletedNode.getRightChild().setColor(false);
-            if (deletedNode.getParent() != null)
-                deletedNode.getParent().setRightChild(deletedNode.getRightChild());
-        } else if (deletedNode.getRightChild() == null) {
-            if (!deletedNode.getColor())
+            if(deletedNode.getParent()!=null)
+            deletedNode.getParent().setRightChild(deletedNode.getRightChild());
+        }
+        else if(deletedNode.getRightChild() == null){
+            if(!deletedNode.getColor())
                 deletedNode.getLeftChild().setColor(false);
-            if (deletedNode.getParent() != null)
-                deletedNode.getParent().setLeftChild(deletedNode.getLeftChild());
-        } else {
-            INode<T, V> predecessor = findMin(deletedNode.getRightChild());
+            if(deletedNode.getParent()!=null)
+            deletedNode.getParent().setLeftChild(deletedNode.getLeftChild());
+        }
+        else {
+            INode<T,V> predecessor = findMin(deletedNode.getRightChild());
             deletedNode.setValue(predecessor.getValue());
             deletedNode.setKey(predecessor.getKey());
             delete(predecessor);
@@ -297,69 +301,79 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         rotateNode.setParent(node);
     }
 
-    private INode<T, V> Find(INode<T, V> root, T key) {
-        if (root == null)
+    protected INode<T,V> search(INode<T,V> root,T key){
+        if(root == null)
             return null;
-        if (key.compareTo(root.getKey()) < 0)
-            return Find(root.getLeftChild(), key);
-        else if (key.compareTo(root.getKey()) > 0)
-            return Find(root.getRightChild(), key);
+        if(key.compareTo(root.getKey()) < 0)
+             return search(root.getLeftChild(),key);
+        else if(key.compareTo(root.getKey()) > 0)
+            return search(root.getRightChild(),key);
         return root;
     }
-
-    private INode<T, V> findMin(INode<T, V> node) {
-        if (node.getLeftChild() == null)
-            return node;
-        return findMin(node.getLeftChild());
+    protected INode<T,V> findMin(INode<T,V> node){
+        if(node == null)
+            return null;
+        while (node.getLeftChild()!=null)
+            node = node.getLeftChild();
+        return node;
     }
-
-    private void doubleBlack(INode<T, V> node) {
+    private void doubleBlack(INode<T,V> node) {
         //CASE 0: IF DB IS ROOT
-        if (node.getParent() == null)
+        if(node.getParent() == null)
             return;
-        INode<T, V> sibling = ((Node<T, V>) node).getSibling();
+        INode<T, V> sibling = ((Node<T,V>)node).getSibling();
         //CASE 1: IF SIBLING IS RED
-        if (sibling.getColor()) {
+        if(sibling.getColor())
+        {
             node.getParent().setColor(true);
             sibling.setColor(false);
-            if (((Node<T, V>) node).isChildLeft()) rotateLeft(node.getParent());
+            if(((Node<T, V>) node).isChildLeft()) rotateLeft(node.getParent());
             else rotateRight(node.getParent());
             doubleBlack(node);
         }
         //CASE 2: IF SIBLING IS BLACK AND BOTH CHILDREN ARE BLACK
-        else if (checkCase2(sibling)) {
+        else if(checkCase2(sibling))
+        {
             INode<T, V> parent = node.getParent();
-            if (parent.getColor()) {
+            if(parent.getColor())
+            {
                 parent.setColor(false);
                 sibling.setColor(true);
                 return;
-            } else {
+            }
+            else
+            {
                 sibling.setColor(true);
                 doubleBlack(parent);
             }
         }
         // if black sibling + at least one red child{near & far > rotations} //1
-        else if ((sibling.getLeftChild() != null && sibling.getLeftChild().getColor())) {
-            if (!((Node<T, V>) sibling).isChildLeft())
+        else if((sibling.getLeftChild()!=null && sibling.getLeftChild().getColor())){
+            if(!((Node<T,V>)sibling).isChildLeft())
                 rotateLeft(sibling);
             rotateRight(sibling.getParent());
-        } else if ((sibling.getRightChild() != null && sibling.getRightChild().getColor())) {
-            if (((Node<T, V>) sibling).isChildLeft())
-                rotateRight(sibling);
+        }
+        else if((sibling.getRightChild()!=null && sibling.getRightChild().getColor())){
+            if(((Node<T,V>)sibling).isChildLeft())
+               rotateRight(sibling);
             rotateLeft(sibling.getParent());
         }
     }
-
-    private boolean checkCase2(INode<T, V> sibling) {
-        if (sibling.getLeftChild() == null && sibling.getRightChild() == null)
+    private boolean checkCase2(INode<T, V> sibling)
+    {
+        if(sibling.getLeftChild() == null && sibling.getRightChild() == null)
             return true;
-        else if (sibling.getRightChild() == null) {
-            if (!sibling.getLeftChild().getColor())
+        else if(sibling.getRightChild() == null)
+        {
+            if(!sibling.getLeftChild().getColor())
                 return true;
-        } else if (sibling.getLeftChild() == null) {
-            if (!sibling.getRightChild().getColor())
+        }
+        else if(sibling.getLeftChild() == null)
+        {
+            if(!sibling.getRightChild().getColor())
                 return true;
-        } else if (!sibling.getRightChild().getColor() && !sibling.getLeftChild().getColor())
+        }
+        else if(!sibling.getRightChild().getColor() && !sibling.getLeftChild().getColor())
             return true;
         return false;
     }

@@ -1,5 +1,7 @@
 package eg.edu.alexu.csd.filestructure.redblacktree.Trees;
 
+import java.util.Map;
+
 public class Node<T extends Comparable<T>, V> implements INode<T,V> {
 
     private T key=null;
