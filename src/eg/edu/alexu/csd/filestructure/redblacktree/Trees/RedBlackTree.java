@@ -12,7 +12,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 
 
     @Override
-    public INode getRoot() {
+    public INode<T,V> getRoot() {
         return this.root;
     }
 
@@ -27,41 +27,37 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
     }
 
     @Override
-    public Object search(Comparable key) {
-        if (root==nil){
-            return null;
-        }
-        if (this.root.getKey().compareTo((T) key) == 0) {
-            return this.root.getValue();
-        } else {
-            return (V) (this.root.getKey().compareTo((T) key) < 0 ? this.search((Node)this.root.getRightChild(), key) : this.search((Node)this.root.getLeftChild(), key));
-        }
+    public V search (T key) {
+            INode<T, V> node = search(root, key);
+            if (node != null)
+                return node.getValue();
+        return null;
     }
 
-    @Override
-    public boolean contains(Comparable key) {
-        if (root != nil) {
-            if (this.root.getKey().compareTo((T) key) == 0) {
-                return true;
-            } else {
-                return this.root.getKey().compareTo((T) key) < 0 ? this.contains(this.root.getRightChild(), key) : this.contains(this.root.getLeftChild(), key);
-            }
-        }
-        else return false;
-    }
 
-    private Object search(Node root, Comparable key) {
+    protected INode<T,V> search(INode<T,V> root, T key) {
+        if (key == null) {
+            throw new RuntimeErrorException(new Error("Can't find null key"));
+        }
         if (root == nil){
             return null;
         }
-            if (root.getKey().compareTo(key) == 0) {
-                return root.getValue();
-            } else {
-                return root.getKey().compareTo(key) < 0 ? this.search((Node)root.getRightChild(), key) : this.search((Node)root.getLeftChild(), key);
-            }
+        if (root.getKey().compareTo(key) == 0) {
+            return root;
+        } else {
+            return root.getKey().compareTo(key) < 0 ? this.search(root.getRightChild(), key) : this.search(root.getLeftChild(), key);
+        }
+    }
+    @Override
+    public boolean contains(T key) {
+        return contains(root,key);
     }
 
-    private boolean contains(INode root, Comparable key) {
+
+    private boolean contains(INode<T,V> root, T key) {
+        if (key == null) {
+            throw new RuntimeErrorException(new Error("Tree doesn't contain null key"));
+        }
         if (root != nil) {
             if (root.getKey().compareTo(key) == 0) {
                 return true;
@@ -301,20 +297,27 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         rotateNode.setParent(node);
     }
 
-    protected INode<T,V> search(INode<T,V> root,T key){
-        if(root == null)
-            return null;
-        if(key.compareTo(root.getKey()) < 0)
-             return search(root.getLeftChild(),key);
-        else if(key.compareTo(root.getKey()) > 0)
-            return search(root.getRightChild(),key);
-        return root;
-    }
+//    protected INode<T,V> search(INode<T,V> root,T key){
+//        if(root == null)
+//            return null;
+//        if(key.compareTo(root.getKey()) < 0)
+//             return search(root.getLeftChild(),key);
+//        else if(key.compareTo(root.getKey()) > 0)
+//            return search(root.getRightChild(),key);
+//        return root;
+//    }
     protected INode<T,V> findMin(INode<T,V> node){
         if(node == null)
             return null;
         while (node.getLeftChild()!=null)
             node = node.getLeftChild();
+        return node;
+    }
+    protected INode<T,V> findMax(INode<T,V> node){
+        if(node == null)
+            return null;
+        while (node.getRightChild()!=null)
+            node = node.getRightChild();
         return node;
     }
     private void doubleBlack(INode<T,V> node) {

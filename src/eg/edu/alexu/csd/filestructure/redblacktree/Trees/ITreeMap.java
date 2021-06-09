@@ -81,7 +81,7 @@ public interface ITreeMap<T extends Comparable<T>, V> {
 	public V get(T key);
 	
 	/**
-	 * Returns a view of the portion of this map whose keys are strictly less than toKey in ascending order..
+	 * Returns a view of the portion of this map whose keys are strictly less than toKey in ascending order.."low..high"
 	 * @param toKey
 	 * @return
 	 */
