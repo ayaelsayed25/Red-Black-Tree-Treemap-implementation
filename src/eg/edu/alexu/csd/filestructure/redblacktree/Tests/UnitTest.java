@@ -500,8 +500,8 @@ public class UnitTest {
 		try {
 			Random r = new Random();
 			HashSet<Integer> list = new HashSet<>();
-			for (int i = 0; i < 7; i++) {
-				int key = r.nextInt(7);
+			for (int i = 0; i < 10000; i++) {
+				int key = r.nextInt(10000);
 				list.add(key);
 				redBlackTree.insert(key, "soso" + key);
 			}
@@ -571,6 +571,7 @@ public class UnitTest {
 		} catch (Throwable e) {
 			TestRunner.fail("Fail to handle deletion", e);
 		}
+
 	}
 
 	/**
