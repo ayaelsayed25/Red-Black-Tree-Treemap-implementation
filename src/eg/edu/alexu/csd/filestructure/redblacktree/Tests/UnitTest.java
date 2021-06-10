@@ -500,14 +500,16 @@ public class UnitTest {
 		try {
 			Random r = new Random();
 			HashSet<Integer> list = new HashSet<>();
-			for (int i = 0; i < 5; i++) {
-				int key = r.nextInt(10000);
+			for (int i = 0; i < 7; i++) {
+				int key = r.nextInt(7);
 				list.add(key);
 				redBlackTree.insert(key, "soso" + key);
 			}
-
-			for (Integer elem : list)
+			int i = 0;
+			for (Integer elem : list){
 				Assert.assertTrue(redBlackTree.delete(elem));
+				System.out.println(i++);
+			}
 			INode<Integer, String> node = redBlackTree.getRoot();
 			if (!(node == null || node.isNull()))
 				Assert.fail();
