@@ -10,6 +10,9 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
 
     @Override
     public Map.Entry<T, V> ceilingEntry(T key) {
+        if (root.contains(key)){
+            return new MapEntry<T, V>(root.search(root.getRoot(),key).getKey(),get(key));
+        }
         return null;
     }
 
@@ -31,7 +34,10 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
 
     @Override
     public boolean containsValue(V value) {
-        return false;
+        if (value == null){
+            throw new RuntimeErrorException(new Error("Can't contain null value"));
+        }
+        return values().contains(value);
     }
 
     @Override
@@ -63,24 +69,10 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
      */
     @Override
     public Map.Entry<T, V> floorEntry(T key) {
-        INode<T,V> node = root.search(root.getRoot(),key);
-        if(node == null)
-            return null;
-        if(node.getLeftChild()!=null){
-            return lastEntry(node.getLeftChild());
+        if (root.contains(key)){
+            return new MapEntry<T, V>(root.search(root.getRoot(),key).getKey(),get(key));
         }
-        //TODO ask TA about this part
-//        INode<T,V> predecessor = new Node<>(node.getKey(), node.getValue(), false);
-//
-//        while (node.getParent()!=null && node == node.getParent().getLeftChild())
-//            node = node.getParent();
-//
-//        if(node.getParent()!=null) predecessor = predecessor.getParent();
-//        return new MapEntry<>(predecessor.getKey(),predecessor.getValue());
-        node = node.getParent();
-        while (node.getParent()!=null && node == node.getParent().getLeftChild())
-            node = node.getParent();
-        return new MapEntry<>(node.getKey(),node.getValue());
+       return null;
     }
 
     @Override
@@ -88,8 +80,6 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
         Map.Entry<T,V> predecessor = floorEntry(key);
         if(predecessor != null)
             return predecessor.getKey();
-        if (this.size == 0)
-            throw new NullPointerException();
         return null;
     }
 
