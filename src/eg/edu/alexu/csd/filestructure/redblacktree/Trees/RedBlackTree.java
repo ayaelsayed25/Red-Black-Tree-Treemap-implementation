@@ -249,8 +249,11 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
             if(!deletedNode.getColor())
                 deletedNode.getRightChild().setColor(false);
             deletedNode.getRightChild().setParent(deletedNode.getParent());
-            if(deletedNode.getParent() != null)
-                deletedNode.getParent().setRightChild(deletedNode.getRightChild());
+            if(deletedNode.getParent() != null) {
+                if(((Node)deletedNode).isChildLeft())
+                    deletedNode.getParent().setLeftChild(deletedNode.getRightChild());
+                else deletedNode.getParent().setRightChild(deletedNode.getRightChild());
+            }
             else
                 root = deletedNode.getRightChild();
         }
@@ -258,8 +261,11 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
             if(!deletedNode.getColor())
                 deletedNode.getLeftChild().setColor(false);
             deletedNode.getLeftChild().setParent(deletedNode.getParent());
-            if(deletedNode.getParent() != null)
-                deletedNode.getParent().setLeftChild(deletedNode.getLeftChild());
+            if(deletedNode.getParent() != null) {
+                if (((Node) deletedNode).isChildLeft())
+                    deletedNode.getParent().setLeftChild(deletedNode.getRightChild());
+                else deletedNode.getParent().setRightChild(deletedNode.getRightChild());
+            }
             else
                 root = deletedNode.getLeftChild();
         }
@@ -454,11 +460,14 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
     public static void main(String[] args) {
         IRedBlackTree<Integer, String> redBlackTree = (IRedBlackTree<Integer, String>) TestRunner.getImplementationInstanceForInterface(IRedBlackTree.class);
         redBlackTree.insert(2, "soso");
+        redBlackTree.insert(0, "soso");
+        redBlackTree.insert(6, "soso");
+        redBlackTree.insert(8, "soso");
         redBlackTree.insert(1, "soso");
-
         redBlackTree.insert(4, "soso");
         redBlackTree.insert(3, "soso");
-        Assert.assertTrue(redBlackTree.delete(1));
+
+        Assert.assertTrue(redBlackTree.delete(0));
 
     }
 }
