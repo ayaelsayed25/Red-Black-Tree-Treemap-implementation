@@ -1,5 +1,8 @@
 package eg.edu.alexu.csd.filestructure.redblacktree.Trees;
 
+import java.util.Map;
+import java.util.Set;
+
 public interface IRedBlackTree<T extends Comparable<T>, V> {
     /**
      * return the root of the given Red black tree.
@@ -46,6 +49,10 @@ public interface IRedBlackTree<T extends Comparable<T>, V> {
      * @param key to be deleted.
      * @return true in case of success and false otherwise.
      */
-    public boolean delete(T key);
+    boolean delete(T key);
 
+    INode<T,V> findMin(INode<T,V> node);
+    INode<T,V> findMax(INode<T,V> node);
+    Set<Map.Entry<T, V>> getEntries(INode<T,V> node);
+    int getSize();
 }

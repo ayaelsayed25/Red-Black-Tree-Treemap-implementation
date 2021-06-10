@@ -7,6 +7,7 @@ import java.util.*;
 public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T, V> {
     private final INode<T, V> nil = new Node<>();
     private INode<T, V> root;
+    private int size;
     private final Set<Map.Entry<T,V>> entries;
 
     public RedBlackTree() {
@@ -27,6 +28,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 
     @Override
     public void clear() {
+        size = 0;
          this.root = null;
     }
 
@@ -40,8 +42,12 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         return null;
     }
 
+    @Override
+    public int getSize(){
+        return size;
+    }
 
-    protected INode<T,V> search(INode<T,V> root, T key) {
+    protected INode<T,V> search(INode<T, V> root, T key) {
         if (key == null) {
             throw new RuntimeErrorException(new Error("Can't find null key"));
         }
@@ -89,11 +95,15 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
             root = null;
             root = newNode;
             root.setColor(false);
+            size++;
             return;
         }
 
-        if (insertNode(this.root, newNode))                //BST Insertion
+        if (insertNode(this.root, newNode))  { //BST Insertion
             insertCases(newNode);                        //Insertion Cases
+            size++;
+        }
+
     }
 
     /**
@@ -210,10 +220,11 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         //TODO sibling null ??
         if(key == null)
             throw new RuntimeErrorException(new Error("Can't delete null key"));
-//        return delete( search(root,key));
-        //TODO fix
-        return delete( search(root,key));
-
+        if( delete( search(root,key))){
+            size--;
+            return true;
+        }
+        return false;
     }
 
     private boolean delete(INode<T, V> deletedNode) {
@@ -326,23 +337,16 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         rotateNode.setParent(node);
     }
 
-//    protected INode<T,V> search(INode<T,V> root,T key){
-//        if(root == null)
-//            return null;
-//        if(key.compareTo(root.getKey()) < 0)
-//             return search(root.getLeftChild(),key);
-//        else if(key.compareTo(root.getKey()) > 0)
-//            return search(root.getRightChild(),key);
-//        return root;
-//    }
-    protected INode<T,V> findMin(INode<T,V> node){
+    @Override
+    public INode<T,V> findMin(INode<T,V> node){
         if(node.isNull())
             return null;
         while (!node.getLeftChild().isNull())
             node = node.getLeftChild();
         return node;
     }
-    protected INode<T,V> findMax(INode<T,V> node){
+    @Override
+    public INode<T,V> findMax(INode<T,V> node){
         if(node.isNull())
             return null;
         while (!node.getRightChild().isNull())

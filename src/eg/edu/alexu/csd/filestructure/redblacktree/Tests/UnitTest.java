@@ -1,34 +1,17 @@
 
 package eg.edu.alexu.csd.filestructure.redblacktree.Tests;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Queue;
-import java.util.Random;
-import java.util.Set;
-import java.util.TreeMap;
-
-import javax.management.RuntimeErrorException;
-
 import eg.edu.alexu.csd.filestructure.redblacktree.Trees.INode;
 import eg.edu.alexu.csd.filestructure.redblacktree.Trees.IRedBlackTree;
 import eg.edu.alexu.csd.filestructure.redblacktree.Trees.ITreeMap;
-import eg.edu.alexu.csd.filestructure.redblacktree.Trees.RedBlackTree;
-import org.hamcrest.core.IsInstanceOf;
 import org.junit.Assert;
 import org.junit.Test;
 import tests.TestRunner;
+
+import javax.management.RuntimeErrorException;
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.Map.Entry;
 
 
 public class UnitTest {
@@ -1315,7 +1298,7 @@ public class UnitTest {
 				t.put(key, val);
 				keys.add(key);
 			}
-			int toKey = keys.get(r.nextInt(keys.size()));
+			int toKey = keys.get(keys.size()-1);
 			ArrayList<Map.Entry<Integer, String>> ans = treemap.headMap(toKey);
 			ArrayList<Map.Entry<Integer, String>> realAns = new ArrayList<>(t.headMap(toKey).entrySet());
 			Collections.sort(realAns, new Comparator<Map.Entry<Integer, String>>() {
@@ -1324,7 +1307,7 @@ public class UnitTest {
 					return o1.getKey() - o2.getKey();
 				}
 			});
-			for (int i = 0; i < ans.size(); i++)
+			for (int i = 0; i < realAns.size(); i++)
 				Assert.assertEquals(ans.get(i), realAns.get(i));
 		} catch (Throwable e) {
  			TestRunner.fail("Fail in headMap", e);
@@ -1366,7 +1349,7 @@ public class UnitTest {
 				t.put(key, val);
 				keys.add(key);
 			}
-			int toKey = keys.get(r.nextInt(keys.size()));
+			int toKey = keys.get(keys.size()-1);
 			ArrayList<Map.Entry<Integer, String>> ans = treemap.headMap(toKey, true);
 			ArrayList<Map.Entry<Integer, String>> realAns = new ArrayList<>(t.headMap(toKey, true).entrySet());
 			Collections.sort(realAns, new Comparator<Map.Entry<Integer, String>>() {
@@ -1375,7 +1358,7 @@ public class UnitTest {
 					return o1.getKey() - o2.getKey();
 				}
 			});
-			for (int i = 0; i < ans.size(); i++)
+			for (int i = 0; i < realAns.size(); i++)
 				Assert.assertEquals(ans.get(i), realAns.get(i));
 		} catch (Throwable e) {
  			TestRunner.fail("Fail in headMap", e);

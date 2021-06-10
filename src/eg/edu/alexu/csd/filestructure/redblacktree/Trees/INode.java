@@ -16,7 +16,7 @@ public interface INode<T extends Comparable<T>, V> {
     INode<T, V> getParent();
     /**
      * set the left child of the current node in the tree
-     * @param leftchild
+     * @param leftChild
      */
     void setLeftChild(INode<T, V> leftChild);
     /**
@@ -60,11 +60,12 @@ public interface INode<T extends Comparable<T>, V> {
      */
     boolean isNull();
 
-    INode getUncle();
+    INode<T,V> getUncle();
 
     boolean isRightChild(INode<T, V> node);
 
     boolean isChildLeft();
 
     INode<T, V> getSibling();
+
 }

@@ -4,26 +4,40 @@ import javax.management.RuntimeErrorException;
 import java.util.*;
 
 public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
-    private int size =0;
-    private final RedBlackTree<T,V> root = new RedBlackTree<>();
+    private final IRedBlackTree<T,V> root = new RedBlackTree<>();
+
 
     @Override
     public Map.Entry<T, V> ceilingEntry(T key) {
-        if (key == null){
+        if (key == null) {
             throw new RuntimeErrorException(new Error("key can't be null"));
         }
-        if (root.contains(key)){
-            return new MapEntry<>(key,get(key));
-        }
-        else{
-            for (Map.Entry<T, V> iterator : root.getEntries(root.getRoot())){
-                if (iterator.getKey().compareTo(key) > 0){
-                    return new MapEntry<>(iterator.getKey(),iterator.getValue());
-                }
-            }
-        }
-            return null;
 
+        INode<T, V> current = root.getRoot();
+        while (!current.isNull()) {
+            if (key.compareTo(current.getKey()) < 0) {
+                if (!current.getLeftChild().isNull())
+                    current = current.getLeftChild();
+                else
+                    return new MapEntry<>(current.getKey(), current.getValue());
+            } else if (key.compareTo(current.getKey()) > 0) {
+                if (current.getRightChild() != null) {
+                    current = current.getRightChild();
+                } else {
+                    INode<T, V> parent = current.getParent();
+                    INode<T, V> child = current;
+                    while (parent != null && child == parent.getRightChild()) {
+                        child = parent;
+                        parent = parent.getParent();
+                    }
+                    if (parent != null)
+                        new MapEntry<>(parent.getKey(), parent.getValue());
+                    return null;
+                }
+            } else
+                return new MapEntry<>(current.getKey(), current.getValue());
+        }
+        return null;
     }
 
     @Override
@@ -33,7 +47,6 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
 
     @Override
     public void clear() {
-        this.size = 0;
         this.root.clear();
     }
 
@@ -86,25 +99,38 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
     /**
      * Returns a key-value mapping associated with the greatest key less than or equal to the given key, or null if there is no such key.
      */
+
     @Override
     public Map.Entry<T, V> floorEntry(T key) {
-        if (key == null){
+        if (key == null) {
             throw new RuntimeErrorException(new Error("key can't be null"));
         }
-        if (root.contains(key)){
-            return new MapEntry<>(key,get(key));
-        }
-        else{
-            LinkedList<Map.Entry<T, V>> list = new LinkedList<>(root.getEntries(root.getRoot()));
-            Iterator<Map.Entry<T, V>> itr = list.descendingIterator();
-            while (itr.hasNext()) {
-                if (itr.next().getKey().compareTo(key) < 0){
-                    return new MapEntry<>(itr.next().getKey(), itr.next().getValue());
+
+        INode<T, V> current = root.getRoot();
+        while (!current.isNull()) {
+            if (key.compareTo(current.getKey()) > 0) {
+                if (!current.getRightChild().isNull())
+                    current = current.getRightChild();
+                else
+                    return new MapEntry<>(current.getKey(), current.getValue());
+            } else if (key.compareTo(current.getKey()) < 0) {
+                if (current.getLeftChild() != null) {
+                    current = current.getLeftChild();
+                } else {
+                    INode<T, V> parent = current.getParent();
+                    INode<T, V> child = current;
+                    while (parent != null && child == parent.getLeftChild()) {
+                        child = parent;
+                        parent = parent.getParent();
+                    }
+                    if (parent != null)
+                        new MapEntry<>(parent.getKey(), parent.getValue());
+                    return null;
                 }
-            }
+            } else
+                return new MapEntry<>(current.getKey(), current.getValue());
         }
         return null;
-
     }
 
     @Override
@@ -117,43 +143,45 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
         if (key == null){
             throw new RuntimeErrorException(new Error("Can't get null key"));
         }
-        return (V) this.root.search(key);
+        return this.root.search(key);
     }
     @Override
     public ArrayList<Map.Entry<T, V>> headMap(T toKey) {
         if(toKey == null)
             throw new RuntimeErrorException(new Error("Key can't be Null"));
-        return getHeadMap(toKey,false);
+        return headMap(toKey,false);
     }
 
     @Override
     public ArrayList<Map.Entry<T, V>> headMap(T toKey, boolean inclusive) {
         if(toKey == null)
             throw new RuntimeErrorException(new Error("Key can't be Null"));
-        return getHeadMap(toKey,inclusive);
+        ArrayList<Map.Entry<T,V>> entries = new ArrayList<>();
+        return lessThanKey(toKey,root.getRoot(),entries,inclusive);
 
     }
+    private void addAll(INode<T,V> node,ArrayList<Map.Entry<T,V>> head) {
+        if (node.isNull()) return;
+        addAll(node.getLeftChild(),head);
+        head.add(new MapEntry<>(node.getKey(),node.getValue()));
+        addAll(node.getRightChild(),head);
+    }
 
-    private ArrayList<Map.Entry<T, V>> getHeadMap(T toKey, boolean inclusive){
-        List<Map.Entry<T, V>> head = new ArrayList<>();
-        for(Map.Entry<T, V> entry:root.getEntries(root.getRoot())){
-            if(entry.getKey().compareTo(toKey)>0)
-                break;
-            else
-                head.add(entry);
+    private ArrayList<Map.Entry<T, V>> lessThanKey(T Key, INode<T,V> node,ArrayList<Map.Entry<T,V>> head,boolean inclusive){
+        if (node.isNull()) return head;
+        if ((inclusive && node.getKey().compareTo(Key)<=0)||(!inclusive && node.getKey().compareTo(Key)<0)) {
+            addAll(node.getLeftChild(),head);
+            head.add(new MapEntry<>(node.getKey(),node.getValue()));
+            lessThanKey(Key, node.getRightChild(),head,inclusive);
+        } else {
+            lessThanKey(Key, node.getLeftChild(),head,inclusive);
         }
-        if(!inclusive)
-            head.remove(head.size()-1);
-        return (ArrayList) head;
-
+        return head;
     }
-    /**
-     * Returns a Set view of the keys contained in this map.
-     * @return
-     */
+
     @Override
     public Set<T> keySet() {
-        TreeSet<T> keys = new TreeSet<T>();
+        TreeSet<T> keys = new TreeSet<>();
         Set<Map.Entry<T,V>> entries = root.getEntries(root.getRoot());
         for(Map.Entry<T,V> entry : entries)
             keys.add(entry.getKey());
@@ -211,7 +239,6 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
             throw new RuntimeErrorException(new Error("Can't put null key"));
         }
         root.insert(key,value);
-        size++;
     }
 
     @Override
@@ -225,13 +252,12 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
 
     @Override
     public boolean remove(T key) {
-        size--;
         return root.delete(key);
     }
 
     @Override
     public int size() {
-        return size;
+        return root.getSize();
     }
 
     @Override
