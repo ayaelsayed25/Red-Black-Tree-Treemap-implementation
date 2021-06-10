@@ -59,4 +59,12 @@ public interface INode<T extends Comparable<T>, V> {
      * @return
      */
     boolean isNull();
+
+    INode getUncle();
+
+    boolean isRightChild(INode<T, V> node);
+
+    boolean isChildLeft();
+
+    INode<T, V> getSibling();
 }

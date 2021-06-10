@@ -1,6 +1,5 @@
 package eg.edu.alexu.csd.filestructure.redblacktree.Trees;
 
-import java.util.Map;
 
 public class Node<T extends Comparable<T>, V> implements INode<T,V> {
 
@@ -87,12 +86,12 @@ public class Node<T extends Comparable<T>, V> implements INode<T,V> {
     public boolean isNull() {
         return this.key == null;
     }
+    @Override
+    public INode<T,V> getUncle(){
+        INode<T,V> uncle;
+        INode<T,V> grandParent = this.getParent().getParent();
 
-    public INode getUncle(){
-        INode uncle = null;
-        INode grandParent = this.getParent().getParent();
-
-        if (((Node)grandParent).isRightChild(this.getParent())){
+        if (grandParent.isRightChild(this.getParent())){
             uncle = grandParent.getLeftChild();
         }
         else{
@@ -101,24 +100,17 @@ public class Node<T extends Comparable<T>, V> implements INode<T,V> {
         return uncle;
     }
 
-    public boolean isLeftChild(INode<T,V> node){
-        //TODO is == right ?
-        if(node==this.leftChild)
-            return true;
-        else
-            return false;
+    @Override
+    public boolean isRightChild(INode<T, V> node){
+        return node == this.rightChild;
     }
-    public boolean isRightChild(INode<T,V> node){
-        if(node==this.rightChild)
-            return true;
-        else
-            return false;
-    }
+    @Override
     public boolean isChildLeft(){
         if(this.parent == null)
             return false;
         return this.equals(this.parent.getLeftChild());
     }
+    @Override
     public INode<T, V> getSibling()
     {
         if(isChildLeft())
