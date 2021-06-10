@@ -551,14 +551,16 @@ public class UnitTest {
 		try {
 			Random r = new Random();
 			HashSet<Integer> list = new HashSet<>();
-			for (int i = 0; i < 100; i++) {
-				int key = r.nextInt(100);
+			for (int i = 0; i < 10000; i++) {
+				int key = r.nextInt(10000);
 				if (r.nextInt(5) % 4 == 0)
 					list.add(key);
+				System.out.println(key);
 				redBlackTree.insert(key, "soso" + key);
 			}
 
 			for (Integer elem : list){
+				System.out.println("delete : " + elem);
 				Assert.assertTrue(redBlackTree.delete(elem));
 				Assert.assertTrue(verifyProps(redBlackTree.getRoot()));
 			}
