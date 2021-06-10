@@ -88,7 +88,8 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         INode<T, V> newNode = new Node<>(key, value, true);
         newNode.setRightChild(nil);
         newNode.setLeftChild(nil);
-        if (root==null) {
+        if (root==null || root.isNull()) {
+            root = null;
             root = newNode;
             root.setColor(false);
             return;
@@ -210,18 +211,11 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
     @Override
     public boolean delete(T key) {
         //TODO sibling null ??
-        System.out.println("before deletion");
-        inOrder(root);
-        System.out.println("IAM DELETING "+key);
-
         if(key == null)
             throw new RuntimeErrorException(new Error("Can't delete null key"));
 //        return delete( search(root,key));
         //TODO fix
-        boolean returnV = delete( search(root,key));
-        System.out.println("After deletion");
-        inOrder(root);
-        return returnV;
+        return delete( search(root,key));
 
     }
 
@@ -231,7 +225,11 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         //TODO if parent is null (root case) //1
         if(deletedNode.getLeftChild().isNull() && deletedNode.getRightChild().isNull()){
             if(deletedNode == root)
-                root = null;
+            {
+                root.setValue(null);
+                root.setKey(null);
+                root.setColor(false);
+            }
             else {
                 deletedNode.setKey(null);
                 deletedNode.setValue(null);
@@ -492,20 +490,16 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 //
 //        Assert.assertTrue(redBlackTree.delete(9));
 //        Assert.assertTrue(redBlackTree.delete(11));
-        Assert.assertTrue(redBlackTree.delete(3));
+        Assert.assertTrue(redBlackTree.delete(3)); //a
 
-        Assert.assertTrue(redBlackTree.delete(5));
+        Assert.assertTrue(redBlackTree.delete(2)); //b
 
-        Assert.assertTrue(redBlackTree.delete(7));
-        Assert.assertTrue(redBlackTree.delete(4));
+        Assert.assertTrue(redBlackTree.delete(8)); //c
+        Assert.assertTrue(redBlackTree.delete(4)); //d
 
-        Assert.assertTrue(redBlackTree.delete(8));
+        Assert.assertTrue(redBlackTree.delete(5)); //e
 
-        Assert.assertTrue(redBlackTree.delete(2));
-
-
-
-
+        Assert.assertTrue(redBlackTree.delete(7)); //f
 
     }
 }
