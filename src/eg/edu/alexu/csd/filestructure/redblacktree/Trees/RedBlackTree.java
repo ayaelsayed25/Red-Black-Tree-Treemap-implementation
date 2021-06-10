@@ -438,8 +438,23 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         entries.add(new MapEntry<>(root.getKey(),root.getValue()));
         inorderTraverse(root.getRightChild());
     }
-    public Set<Map.Entry<T, V>> getEntries(INode node) {
-        inorderTraverse(node);
+    private void inorderTraverseHeadMap(INode<T,V> root,T key,boolean inclusive){
+        if(root.isNull())
+            return ;
+        inorderTraverse(root.getLeftChild());
+        if(key.compareTo(root.getKey()) == 0) {
+            if (inclusive)
+                entries.add(new MapEntry<>(root.getKey(), root.getValue()));
+            return;
+        }
+        entries.add(new MapEntry<>(root.getKey(),root.getValue()));
+        inorderTraverse(root.getRightChild());
+    }
+    public Set<Map.Entry<T, V>> getEntries(INode node,T key,boolean inclusive) {
+        if(key == null)
+            inorderTraverse(node);
+        else
+            inorderTraverseHeadMap(node,key,inclusive);
         return entries;
     }
     public void inOrder(INode<T,V> node){
