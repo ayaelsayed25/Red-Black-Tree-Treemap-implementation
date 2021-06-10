@@ -406,7 +406,7 @@ public class UnitTest {
 			for(int i = 0; i < 100; i++) {
 				int key = r.nextInt(1000);
 				redBlackTree.insert(key, "toto" + key);
-				//Assert.assertTrue(verifyProps(redBlackTree.getRoot()));
+				Assert.assertTrue(verifyProps(redBlackTree.getRoot()));
 			}
 
 		}catch (Throwable e) {
@@ -1066,8 +1066,8 @@ public class UnitTest {
 		try {
 			List<Integer> list = new ArrayList<>();
 			Random r = new Random();
-			for (int i = 0; i < 1000; i++) {
-				int key = r.nextInt(1000);
+			for (int i = 0; i < 3; i++) {
+				int key = r.nextInt(3);
 				list.add(key);
 				treemap.put(key, "soso" + key);
 			}

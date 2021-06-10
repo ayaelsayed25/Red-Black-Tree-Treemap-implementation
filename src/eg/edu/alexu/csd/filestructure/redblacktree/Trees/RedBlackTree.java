@@ -60,6 +60,8 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 
     @Override
     public boolean contains(T key) {
+        if(root == null)
+            return false;
         return contains(root,key);
     }
 
@@ -68,7 +70,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         if (key == null) {
             throw new RuntimeErrorException(new Error("Tree doesn't contain null key"));
         }
-        if (root != null) {
+        if (!root.isNull()) {
             if (root.getKey().compareTo(key) == 0) {
                 return true;
             } else {
@@ -86,8 +88,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         INode<T, V> newNode = new Node<>(key, value, true);
         newNode.setRightChild(nil);
         newNode.setLeftChild(nil);
-        newNode.setParent(null);
-        if (root == null) {
+        if (root==null) {
             root = newNode;
             root.setColor(false);
             return;
@@ -132,7 +133,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         //Easy Case ,Parent is Black OR it does not have grandparent
         if (!newNode.getParent().getColor() || grandParent == null)
             return;
-        boolean uncleColor = ((Node) newNode).getUncle().getColor();
+        boolean uncleColor = ((Node<T,V>) newNode).getUncle().getColor();
         // Right  --> True , Left --> false
         boolean parentDirection = false, childDirection = false;
 
@@ -266,7 +267,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         INode<T, V> node = rotateNode.getRightChild();         //Right Child of The rotate node
         rotateNode.setRightChild(node.getLeftChild());
         //Check Whether the right node of the rotate node has left child or not
-        if (node.getLeftChild().isNull()) {
+        if (!node.getLeftChild().isNull()) {
             node.getLeftChild().setParent(rotateNode);
         }
         node.setLeftChild(rotateNode);
@@ -282,7 +283,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         INode<T, V> node = rotateNode.getLeftChild();         //Left Child of The rotate node
         rotateNode.setLeftChild(node.getRightChild());
         //Check Whether the left node of the rotate node has right child or not
-        if (node.getRightChild().isNull()) {
+        if (!node.getRightChild().isNull()) {
             node.getRightChild().setParent(rotateNode);
         }
         node.setRightChild(rotateNode);
@@ -380,7 +381,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         }
     }
     private void inorderTraverse(INode<T,V> root){
-        if(root == null)
+        if(root.isNull())
             return ;
         inorderTraverse(root.getLeftChild());
         entries.add(new MapEntry<>(root.getKey(),root.getValue()));

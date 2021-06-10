@@ -77,17 +77,17 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
             return lastEntry(node.getLeftChild());
         }
         //TODO ask TA about this part
-//        INode<T,V> predecessor = new Node<>(node.getKey(), node.getValue(), false);
-//
-//        while (node.getParent()!=null && node == node.getParent().getLeftChild())
-//            node = node.getParent();
-//
-//        if(node.getParent()!=null) predecessor = predecessor.getParent();
-//        return new MapEntry<>(predecessor.getKey(),predecessor.getValue());
-        node = node.getParent();
+        INode<T,V> predecessor = new Node<>(node.getKey(), node.getValue(), false);
+
         while (node.getParent()!=null && node == node.getParent().getLeftChild())
             node = node.getParent();
-        return new MapEntry<>(node.getKey(),node.getValue());
+
+        if(node.getParent()!=null) predecessor = predecessor.getParent();
+        return new MapEntry<>(predecessor.getKey(),predecessor.getValue());
+//        node = node.getParent();
+//        while (node.getParent()!=null && node == node.getParent().getLeftChild())
+//            node = node.getParent();
+//        return new MapEntry<>(node.getKey(),node.getValue());
     }
 
     @Override
