@@ -16,7 +16,7 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
             return new MapEntry<>(key,get(key));
         }
         else{
-            for (Map.Entry<T, V> iterator : root.getEntries(root.getRoot(),null,false)){
+            for (Map.Entry<T, V> iterator : root.getEntries(root.getRoot())){
                 if (iterator.getKey().compareTo(key) > 0){
                     return new MapEntry<>(iterator.getKey(),iterator.getValue());
                 }
@@ -56,7 +56,7 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
 
     @Override
     public Set<Map.Entry<T, V>> entrySet() {
-        return root.getEntries(root.getRoot(),null,false);
+        return root.getEntries(root.getRoot());
     }
 
     @Override
@@ -97,7 +97,7 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
             return new MapEntry<>(key,get(key));
         }
         else{
-            LinkedList<Map.Entry<T, V>> list = new LinkedList<>(root.getEntries(root.getRoot(),null,false));
+            LinkedList<Map.Entry<T, V>> list = new LinkedList<>(root.getEntries(root.getRoot()));
             Iterator<Map.Entry<T, V>> itr = list.descendingIterator();
             while (itr.hasNext()) {
                 if (itr.next().getKey().compareTo(key) < 0){
@@ -132,15 +132,13 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
     public ArrayList<Map.Entry<T, V>> headMap(T toKey, boolean inclusive) {
         if(toKey == null)
             throw new RuntimeErrorException(new Error("Key can't be Null"));
-        if(inclusive)
-            return getHeadMap(toKey,inclusive);
-        else
-            return getHeadMap(toKey,inclusive);
+        return getHeadMap(toKey,inclusive);
+
     }
 
     private ArrayList<Map.Entry<T, V>> getHeadMap(T toKey, boolean inclusive){
         List<Map.Entry<T, V>> head = new ArrayList<>();
-        for(Map.Entry<T, V> entry:root.getEntries(root.getRoot(),toKey,inclusive)){
+        for(Map.Entry<T, V> entry:root.getEntries(root.getRoot())){
             if(entry.getKey().compareTo(toKey)>0)
                 break;
             else
@@ -158,7 +156,7 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
     @Override
     public Set<T> keySet() {
         TreeSet<T> keys = new TreeSet<T>();
-        Set<Map.Entry<T,V>> entries = root.getEntries(root.getRoot(),null,false);
+        Set<Map.Entry<T,V>> entries = root.getEntries(root.getRoot());
         for(Map.Entry<T,V> entry : entries)
             keys.add(entry.getKey());
         return keys;
@@ -244,7 +242,7 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
     @Override
     public Collection<V> values() {
         List<V> values = new ArrayList<>();
-        Set<Map.Entry<T,V>> entries = root.getEntries(root.getRoot(),null,false);
+        Set<Map.Entry<T,V>> entries = root.getEntries(root.getRoot());
         for(Map.Entry<T,V> entry : entries)
             values.add(entry.getValue());
         return values;
