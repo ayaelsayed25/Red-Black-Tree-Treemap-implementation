@@ -10,10 +10,14 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
 
     @Override
     public Map.Entry<T, V> ceilingEntry(T key) {
-        if (root.contains(key)){
-            return new MapEntry<T, V>(root.search(root.getRoot(),key).getKey(),get(key));
-        }
-        return null;
+        INode node = (INode) root.search(key);
+        if(node.getRightChild().getKey() != null)
+            return new MapEntry<>(node.getRightChild().getKey(),node.getRightChild().getValue());
+        if (node.getParent().getKey() != null)
+            return new MapEntry<>(node.getParent().getKey(),node.getParent().getValue());
+        else
+            return null;
+
     }
 
     @Override
@@ -34,10 +38,7 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
 
     @Override
     public boolean containsValue(V value) {
-        if (value == null){
-            throw new RuntimeErrorException(new Error("Can't contain null value"));
-        }
-        return values().contains(value);
+        return false;
     }
 
     @Override
@@ -69,10 +70,24 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
      */
     @Override
     public Map.Entry<T, V> floorEntry(T key) {
-        if (root.contains(key)){
-            return new MapEntry<T, V>(root.search(root.getRoot(),key).getKey(),get(key));
+        INode<T,V> node = root.search(root.getRoot(),key);
+        if(node == null)
+            return null;
+        if(node.getLeftChild()!=null){
+            return lastEntry(node.getLeftChild());
         }
-       return null;
+        //TODO ask TA about this part
+        INode<T,V> predecessor = new Node<>(node.getKey(), node.getValue(), false);
+
+        while (node.getParent()!=null && node == node.getParent().getLeftChild())
+            node = node.getParent();
+
+        if(node.getParent()!=null) predecessor = predecessor.getParent();
+        return new MapEntry<>(predecessor.getKey(),predecessor.getValue());
+//        node = node.getParent();
+//        while (node.getParent()!=null && node == node.getParent().getLeftChild())
+//            node = node.getParent();
+//        return new MapEntry<>(node.getKey(),node.getValue());
     }
 
     @Override
@@ -80,6 +95,8 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
         Map.Entry<T,V> predecessor = floorEntry(key);
         if(predecessor != null)
             return predecessor.getKey();
+        if (this.size == 0)
+            throw new NullPointerException();
         return null;
     }
 
