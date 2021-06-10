@@ -1,7 +1,7 @@
 package eg.edu.alexu.csd.filestructure.redblacktree.Trees;
 
-import eg.edu.alexu.csd.filestructure.redblacktree.Tests.TestRunner;
 import org.junit.Assert;
+import tests.TestRunner;
 
 import javax.management.RuntimeErrorException;
 import java.util.*;
@@ -13,7 +13,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
     private Set<Map.Entry<T,V>> entries;
 
     public RedBlackTree() {
-        root = nil;
+        root = null;
         entries = new LinkedHashSet<>();
     }
 
@@ -25,19 +25,21 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 
     @Override
     public boolean isEmpty() {
-        return this.root == nil;
+        return this.root == null;
     }
 
     @Override
     public void clear() {
-         this.root = nil;
+         this.root = null;
     }
 
     @Override
     public V search (T key) {
-            INode<T, V> node = search(root, key);
-            if (node != null)
-                return node.getValue();
+        if(root == null)
+            return null;
+        INode<T, V> node = search(root, key);
+        if (node != null)
+            return node.getValue();
         return null;
     }
 
@@ -66,7 +68,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         if (key == null) {
             throw new RuntimeErrorException(new Error("Tree doesn't contain null key"));
         }
-        if (root != nil) {
+        if (root != null) {
             if (root.getKey().compareTo(key) == 0) {
                 return true;
             } else {
@@ -84,8 +86,8 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         INode<T, V> newNode = new Node<>(key, value, true);
         newNode.setRightChild(nil);
         newNode.setLeftChild(nil);
-        newNode.setParent(nil);
-        if (root == nil) {
+        newNode.setParent(null);
+        if (root == null) {
             root = newNode;
             root.setColor(false);
             return;
@@ -102,22 +104,23 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
     private boolean insertNode(INode<T, V> root, INode<T, V> newNode) {
         try {
             if (newNode.getKey().compareTo(root.getKey()) > 0) {    //newNode > root
-                if (root.getRightChild() == nil) {
+                if (root.getRightChild().isNull()) {
                     root.setRightChild(newNode);
                     newNode.setParent(root);
+                    return true;
                 }
-                insertNode(root.getRightChild(), newNode);
+                return insertNode(root.getRightChild(), newNode);
             } else if (newNode.getKey().compareTo(root.getKey()) < 0) { //newNode < root
-                if (root.getLeftChild() == nil) {
+                if (root.getLeftChild().isNull()) {
                     root.setLeftChild(newNode);
                     newNode.setParent(root);
+                    return true;
                 }
-                insertNode(root.getLeftChild(), newNode);
+                return insertNode(root.getLeftChild(), newNode);
             } else {
                 root.setValue(newNode.getValue());
                 return false;
             }
-            return true;
         } catch (ClassCastException e) {
             throw new ClassCastException("can't compare different data types");
         }
@@ -127,7 +130,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         Node<T, V> parent = (Node<T, V>) newNode.getParent();
         Node<T, V> grandParent = (Node<T, V>) newNode.getParent().getParent();
         //Easy Case ,Parent is Black OR it does not have grandparent
-        if (!newNode.getParent().getColor() || grandParent == nil)
+        if (!newNode.getParent().getColor() || grandParent == null)
             return;
         boolean uncleColor = ((Node) newNode).getUncle().getColor();
         // Right  --> True , Left --> false
@@ -158,7 +161,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         grandParent.setColor(true);
         newNode.getParent().setColor(false);
         ((Node<T, V>) newNode).getUncle().setColor(false);
-        if (grandParent.getParent() != nil) {
+        if (grandParent.getParent() != null) {
             if (grandParent.getParent().getColor())
                 insertCases(grandParent);
         } else {
@@ -263,7 +266,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         INode<T, V> node = rotateNode.getRightChild();         //Right Child of The rotate node
         rotateNode.setRightChild(node.getLeftChild());
         //Check Whether the right node of the rotate node has left child or not
-        if (node.getLeftChild() != nil) {
+        if (node.getLeftChild().isNull()) {
             node.getLeftChild().setParent(rotateNode);
         }
         node.setLeftChild(rotateNode);
@@ -279,7 +282,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         INode<T, V> node = rotateNode.getLeftChild();         //Left Child of The rotate node
         rotateNode.setLeftChild(node.getRightChild());
         //Check Whether the left node of the rotate node has right child or not
-        if (node.getRightChild() != nil) {
+        if (node.getRightChild().isNull()) {
             node.getRightChild().setParent(rotateNode);
         }
         node.setRightChild(rotateNode);
@@ -292,13 +295,13 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
          * if it has parent , then set the parent child to node
          * it checks whether the rotate node is right or left .
          */
-        if (rotateNode.getParent() != nil) {
+        if (rotateNode.getParent() != null) {
             if (((Node<T, V>) rotateNode.getParent()).isRightChild(rotateNode))
                 rotateNode.getParent().setRightChild(node);
             else
                 rotateNode.getParent().setLeftChild(node);
         } else {
-            node.setParent(nil);
+            node.setParent(null);
             this.root = node;
         }
         rotateNode.setParent(node);
@@ -377,7 +380,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         }
     }
     private void inorderTraverse(INode<T,V> root){
-        if(root == nil)
+        if(root == null)
             return ;
         inorderTraverse(root.getLeftChild());
         entries.add(new MapEntry<>(root.getKey(),root.getValue()));
@@ -405,7 +408,7 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
              redBlackTree.insert(7, "soso");
 //			Assert.assertTrue(redBlackTree.delete(3));
 //        Assert.assertTrue(redBlackTree.delete(4));
-        Assert.assertTrue(redBlackTree.delete(6));
+     //   Assert.assertTrue(redBlackTree.delete(6));
 //        try {
 //            Random r = new Random();
 //            HashSet<Integer> list = new HashSet<>();

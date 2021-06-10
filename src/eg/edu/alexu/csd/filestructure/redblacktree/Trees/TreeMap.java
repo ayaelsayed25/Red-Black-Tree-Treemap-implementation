@@ -10,7 +10,14 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
 
     @Override
     public Map.Entry<T, V> ceilingEntry(T key) {
-        return null;
+        INode node = (INode) root.search(key);
+        if(node.getRightChild().getKey() != null)
+            return new MapEntry<>(node.getRightChild().getKey(),node.getRightChild().getValue());
+        if (node.getParent().getKey() != null)
+            return new MapEntry<>(node.getParent().getKey(),node.getParent().getValue());
+        else
+            return null;
+
     }
 
     @Override
