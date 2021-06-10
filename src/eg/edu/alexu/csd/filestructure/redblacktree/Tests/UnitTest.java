@@ -551,19 +551,21 @@ public class UnitTest {
 		try {
 			Random r = new Random();
 			HashSet<Integer> list = new HashSet<>();
-			for (int i = 0; i < 10; i++) {
-				int key = r.nextInt(10000);
+			for (int i = 0; i < 100; i++) {
+				int key = r.nextInt(100);
 				if (r.nextInt(5) % 4 == 0)
 					list.add(key);
 				redBlackTree.insert(key, "soso" + key);
 			}
 
-			for (Integer elem : list)
+			for (Integer elem : list){
 				Assert.assertTrue(redBlackTree.delete(elem));
-			INode<Integer, String> node = redBlackTree.getRoot();
-			if ((node == null || node.isNull()))
-				Assert.fail();
-			Assert.assertTrue(verifyProps(node));
+				Assert.assertTrue(verifyProps(redBlackTree.getRoot()));
+			}
+//			INode<Integer, String> node = redBlackTree.getRoot();
+//			if ((node == null || node.isNull()))
+//				Assert.fail();
+//			Assert.assertTrue(verifyProps(node));
 		} catch (Throwable e) {
 			TestRunner.fail("Fail to handle deletion", e);
 		}
@@ -635,8 +637,8 @@ public class UnitTest {
 		try {
 			Random r = new Random();
 			HashSet<Integer> list = new HashSet<>();
-			for (int i = 0; i < 100000; i++) {
-				int key = r.nextInt(10000);
+			for (int i = 0; i < 10; i++) {
+				int key = r.nextInt(10);
 				redBlackTree.insert(key, "soso" + key);
 				list.add(key);
 			}
