@@ -104,14 +104,17 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
     public V get(T key) {
         return (V) this.root.search(key);
     }
-
     @Override
     public ArrayList<Map.Entry<T, V>> headMap(T toKey) {
+        if(toKey == null)
+            throw new RuntimeErrorException(new Error("Key can't be Null"));
         return getHeadMap(toKey,false);
     }
 
     @Override
     public ArrayList<Map.Entry<T, V>> headMap(T toKey, boolean inclusive) {
+        if(toKey == null)
+            throw new RuntimeErrorException(new Error("Key can't be Null"));
         if(inclusive)
             return getHeadMap(toKey,inclusive);
         else
@@ -119,15 +122,16 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
     }
 
     private ArrayList<Map.Entry<T, V>> getHeadMap(T toKey, boolean inclusive){
-        INode node=root.search(root.getRoot(),toKey);
-        ArrayList<Map.Entry<T, V>> head;
-        if(!inclusive)
-           head= new ArrayList<>(root.getEntries(node.getLeftChild()));
-        else {
-            head = new ArrayList<>(root.getEntries(node.getLeftChild()));
-            head.add(new MapEntry<>(node.getKey(),node.getValue()));
+        List<Map.Entry<T, V>> head = new ArrayList<>();
+        for(Map.Entry<T, V> entry:root.getEntries(root.getRoot())){
+            if(entry.getKey().compareTo(toKey)>0)
+                break;
+            else
+                head.add(entry);
         }
-        return head;
+        if(!inclusive)
+            head.remove(head.size()-1);
+        return (ArrayList) head;
 
     }
     /**
