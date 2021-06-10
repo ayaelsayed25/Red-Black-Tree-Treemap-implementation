@@ -209,7 +209,6 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
 
     @Override
     public boolean delete(T key) {
-        //TODO Stackflow ???
         //TODO sibling null ??
         System.out.println("before deletion");
         inOrder(root);
@@ -231,24 +230,38 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
             return false;
         //TODO if parent is null (root case) //1
         if(deletedNode.getLeftChild().isNull() && deletedNode.getRightChild().isNull()){
-            deletedNode.setColor(false);
-            deletedNode.setKey(null);
-            deletedNode.setValue(null);
-            if(!deletedNode.getColor()){
-                doubleBlack(deletedNode);
+            if(deletedNode == root)
+                root = null;
+            else {
+                deletedNode.setKey(null);
+                deletedNode.setValue(null);
+                deletedNode.setLeftChild(null);
+                deletedNode.setRightChild(null);
+                if(!deletedNode.getColor()){
+                    doubleBlack(deletedNode);
+                }//TODO CHECK COLOR
+                deletedNode.setColor(false);
+
             }
+
         }
         else if(deletedNode.getLeftChild().isNull()){
             if(!deletedNode.getColor())
                 deletedNode.getRightChild().setColor(false);
+            deletedNode.getRightChild().setParent(deletedNode.getParent());
             if(deletedNode.getParent() != null)
                 deletedNode.getParent().setRightChild(deletedNode.getRightChild());
+            else
+                root = deletedNode.getRightChild();
         }
         else if(deletedNode.getRightChild().isNull()){
             if(!deletedNode.getColor())
                 deletedNode.getLeftChild().setColor(false);
+            deletedNode.getLeftChild().setParent(deletedNode.getParent());
             if(deletedNode.getParent() != null)
                 deletedNode.getParent().setLeftChild(deletedNode.getLeftChild());
+            else
+                root = deletedNode.getLeftChild();
         }
         else {
             INode<T,V> predecessor = findMin(deletedNode.getRightChild());
@@ -333,10 +346,10 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
     }
     private void doubleBlack(INode<T,V> node) {
         //CASE 0: IF DB IS ROOT
-        INode<T, V> sibling = ((Node<T,V>)node).getSibling();
-        if(node.getParent() == null || sibling == null )
+        if(node.getParent() == null)
             return;
         //CASE 1: IF SIBLING IS RED
+        INode<T, V> sibling = ((Node<T,V>)node).getSibling();
         if(sibling.getColor())
         {
             node.getParent().setColor(true);
@@ -365,19 +378,29 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
             if(!((Node<T,V>)sibling).isChildLeft()){
                 sibling.setColor(true);
                 sibling.getLeftChild().setColor(false);
-                rotateLeft(sibling);
+                rotateRight(sibling);
+                doubleBlack(node);
+//                sibling = node.getParent().getRightChild();
             }
-            sibling.getLeftChild().setColor(false);
-            rotateRight(sibling.getParent());
+            else{
+                //case 6
+                sibling.getLeftChild().setColor(false);
+                rotateLeft(sibling.getParent());
+            }
+
         }
         else if((sibling.getRightChild().getColor())){
             if(((Node<T,V>)sibling).isChildLeft()){
                 sibling.setColor(true);
                 sibling.getRightChild().setColor(false);
-                rotateRight(sibling);
+                rotateLeft(sibling);
+                doubleBlack(node);
+            }else {
+                //case 6
+                sibling.getRightChild().setColor(false);
+                rotateRight(sibling.getParent());
             }
-            sibling.getRightChild().setColor(false);
-            rotateLeft(sibling.getParent());
+
         }
     }
     private void inorderTraverse(INode<T,V> root){
@@ -392,41 +415,22 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         return entries;
     }
     public void inOrder(INode<T,V> node){
-        if (node.isNull()) {
+        if (node==null || node.isNull()) {
             return;
         }
-        inOrder(node.getLeftChild());
         System.out.println("key "+ node.getKey() + " value " + node.getValue()+" color " + node.getColor());
+        inOrder(node.getLeftChild());
         inOrder(node.getRightChild());
     }
 
     public static void main(String[] args) {
         IRedBlackTree<Integer, String> redBlackTree = (IRedBlackTree<Integer, String>) TestRunner.getImplementationInstanceForInterface(IRedBlackTree.class);
-//        redBlackTree.insert(2, "soso");
-//			redBlackTree.insert(3, "soso");
-//			redBlackTree.insert(4, "soso");
-			redBlackTree.insert(6, "soso");
-             redBlackTree.insert(7, "soso");
-//			Assert.assertTrue(redBlackTree.delete(3));
-//        Assert.assertTrue(redBlackTree.delete(4));
-     //   Assert.assertTrue(redBlackTree.delete(6));
-//        try {
-//            Random r = new Random();
-//            HashSet<Integer> list = new HashSet<>();
-//            for (int i = 0; i < 5; i++) {
-//                int key = r.nextInt(10);
-//                list.add(key);
-//                redBlackTree.insert(key, "soso" + key);
-//            }
-//
-//            for (Integer elem : list)
-//                Assert.assertTrue(redBlackTree.delete(elem));
-//            INode<Integer, String> node = redBlackTree.getRoot();
-//            if (!(node == null || node.isNull()))
-//                Assert.fail();
-//        } catch (Throwable e) {
-//            TestRunner.fail("Fail to handle deletion", e);
-//        }
+        redBlackTree.insert(2, "soso");
+        redBlackTree.insert(1, "soso");
+
+        redBlackTree.insert(4, "soso");
+        redBlackTree.insert(3, "soso");
+        Assert.assertTrue(redBlackTree.delete(1));
 
     }
 }
