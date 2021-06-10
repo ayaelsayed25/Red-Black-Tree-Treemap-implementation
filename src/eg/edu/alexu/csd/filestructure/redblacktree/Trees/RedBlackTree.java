@@ -374,34 +374,56 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
             }
         }
         // if black sibling + at least one red child{near & far > rotations} //1
-        else if((sibling.getLeftChild().getColor())){
-            if(!((Node<T,V>)sibling).isChildLeft()){
-                sibling.setColor(true);
-                sibling.getLeftChild().setColor(false);
-                rotateRight(sibling);
-                doubleBlack(node);
-//                sibling = node.getParent().getRightChild();
-            }
-            else{
-                //case 6
-                sibling.getLeftChild().setColor(false);
-                rotateLeft(sibling.getParent());
-            }
-
-        }
-        else if((sibling.getRightChild().getColor())){
-            if(((Node<T,V>)sibling).isChildLeft()){
-                sibling.setColor(true);
-                sibling.getRightChild().setColor(false);
+        //if near:
+        else if(isNear(sibling))
+        {
+            sibling.setColor(true);
+            sibling.getRightChild().setColor(false);
+            sibling.getLeftChild().setColor(false);
+            if(((Node)sibling).isChildLeft())
                 rotateLeft(sibling);
-                doubleBlack(node);
-            }else {
-                //case 6
-                sibling.getRightChild().setColor(false);
-                rotateRight(sibling.getParent());
-            }
-
+            else rotateRight(sibling);
+            doubleBlack(node);
         }
+        else
+        {
+            boolean temp = node.getParent().getColor();
+            node.getParent().setColor(sibling.getColor());
+            sibling.setColor(temp);
+            if(((Node<T, V>) node).isChildLeft())
+                rotateLeft(node.getParent());
+            else rotateRight(node.getParent());
+            sibling.getLeftChild().setColor(false);
+            sibling.getRightChild().setColor(false);
+        }
+//        else if((sibling.getLeftChild().getColor())){
+//            if(!((Node<T,V>)sibling).isChildLeft()){
+//                sibling.setColor(true);
+//                sibling.getLeftChild().setColor(false);
+//                rotateRight(sibling);
+//                doubleBlack(node);
+////                sibling = node.getParent().getRightChild();
+//            }
+//            else{
+//                //case 6
+//                sibling.getLeftChild().setColor(false);
+//                rotateLeft(sibling.getParent());
+//            }
+//
+//        }
+//        else if((sibling.getRightChild().getColor())){
+//            if(((Node<T,V>)sibling).isChildLeft()){
+//                sibling.setColor(true);
+//                sibling.getRightChild().setColor(false);
+//                rotateLeft(sibling);
+//                doubleBlack(node);
+//            }else {
+//                //case 6
+//                sibling.getRightChild().setColor(false);
+//                rotateRight(sibling.getParent());
+//            }
+//
+//        }
     }
     private void inorderTraverse(INode<T,V> root){
         if(root.isNull())
@@ -421,6 +443,12 @@ public class RedBlackTree<T extends Comparable<T>, V> implements IRedBlackTree<T
         System.out.println("key "+ node.getKey() + " value " + node.getValue()+" color " + node.getColor());
         inOrder(node.getLeftChild());
         inOrder(node.getRightChild());
+    }
+    public boolean isNear(INode<T, V> sibling)
+    {
+        if(((Node)sibling).isChildLeft() && sibling.getRightChild().getColor() || !((Node)sibling).isChildLeft() && sibling.getLeftChild().getColor())
+            return true;
+        return false;
     }
 
     public static void main(String[] args) {

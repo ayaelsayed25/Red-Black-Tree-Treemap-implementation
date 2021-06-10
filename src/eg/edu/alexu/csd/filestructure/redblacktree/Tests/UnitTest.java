@@ -550,7 +550,7 @@ public class UnitTest {
 		try {
 			Random r = new Random();
 			HashSet<Integer> list = new HashSet<>();
-			for (int i = 0; i < 100000; i++) {
+			for (int i = 0; i < 10; i++) {
 				int key = r.nextInt(10000);
 				if (r.nextInt(5) % 4 == 0)
 					list.add(key);
