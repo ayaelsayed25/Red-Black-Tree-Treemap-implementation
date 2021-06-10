@@ -827,7 +827,6 @@ public class UnitTest {
 	public void testContaninKeyNormal() {
 
 		ITreeMap<Integer, String> treemap = (ITreeMap<Integer, String>) TestRunner.getImplementationInstanceForInterface(ITreeMap.class);
-		
 		try {
 			List<Integer> list = new ArrayList<>();
 			Random r = new Random();
@@ -1284,7 +1283,7 @@ public class UnitTest {
 				t.put(key, val);
 				keys.add(key);
 			}
-			int toKey = keys.get(r.nextInt(keys.size()));
+			int toKey = keys.get(keys.size()-1);
 			ArrayList<Map.Entry<Integer, String>> ans = treemap.headMap(toKey);
 			ArrayList<Map.Entry<Integer, String>> realAns = new ArrayList<>(t.headMap(toKey).entrySet());
 			Collections.sort(realAns, new Comparator<Map.Entry<Integer, String>>() {
@@ -1293,7 +1292,7 @@ public class UnitTest {
 					return o1.getKey() - o2.getKey();
 				}
 			});
-			for (int i = 0; i < ans.size(); i++) 
+			for (int i = 0; i < realAns.size(); i++)
 				Assert.assertEquals(ans.get(i), realAns.get(i));
 		} catch (Throwable e) {
  			TestRunner.fail("Fail in headMap", e);
@@ -1335,7 +1334,7 @@ public class UnitTest {
 				t.put(key, val);
 				keys.add(key);
 			}
-			int toKey = keys.get(r.nextInt(keys.size()));
+			int toKey = keys.get(keys.size()-1);
 			ArrayList<Map.Entry<Integer, String>> ans = treemap.headMap(toKey, true);
 			ArrayList<Map.Entry<Integer, String>> realAns = new ArrayList<>(t.headMap(toKey, true).entrySet());
 			Collections.sort(realAns, new Comparator<Map.Entry<Integer, String>>() {
@@ -1344,7 +1343,7 @@ public class UnitTest {
 					return o1.getKey() - o2.getKey();
 				}
 			});
-			for (int i = 0; i < ans.size(); i++) 
+			for (int i = 0; i < realAns.size(); i++)
 				Assert.assertEquals(ans.get(i), realAns.get(i));
 		} catch (Throwable e) {
  			TestRunner.fail("Fail in headMap", e);
