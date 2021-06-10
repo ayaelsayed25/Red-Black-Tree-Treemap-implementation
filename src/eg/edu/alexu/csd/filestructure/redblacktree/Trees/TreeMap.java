@@ -192,7 +192,6 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
         Map.Entry<T, V> first = firstEntry();
         if (first != null) {
             remove(first.getKey());
-            size--;
             return first;
         }
         return null;
@@ -203,7 +202,6 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
         Map.Entry<T, V> last = lastEntry();
         if (last != null) {
             remove(last.getKey());
-            size--;
             return last;
         }
         return null;
@@ -229,9 +227,8 @@ public class TreeMap<T extends Comparable<T>,V> implements ITreeMap<T,V>{
 
     @Override
     public boolean remove(T key) {
-        root.delete(key);
         size--;
-        return false;
+        return root.delete(key);
     }
 
     @Override
